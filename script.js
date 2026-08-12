@@ -373,8 +373,29 @@ function initializeFilters() {
 }
 
 /* --------------------------------------------------------------------------
-   5. BIBTEX CITATION MODAL
+   5. BIBTEX CITATION MODAL & TOAST NOTIFICATION
    -------------------------------------------------------------------------- */
+function showToast(message) {
+  let container = document.querySelector('.toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = `<i class="fas fa-check-circle"></i> <span>${message}</span>`;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.animation = 'toastFadeOut 0.3s forwards';
+    setTimeout(() => {
+      toast.remove();
+    }, 300);
+  }, 2500);
+}
+
 function initializeCitationModal() {
   const citeModal = document.getElementById('citeModal');
   const citeModalClose = document.getElementById('citeModalClose');
@@ -410,6 +431,7 @@ function initializeCitationModal() {
       navigator.clipboard.writeText(bibtexText.textContent).then(() => {
         const originalText = copyBibtexBtn.innerHTML;
         copyBibtexBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        showToast('BibTeX citation copied to clipboard!');
         setTimeout(() => {
           copyBibtexBtn.innerHTML = originalText;
         }, 2000);
