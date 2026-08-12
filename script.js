@@ -8,7 +8,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initializeTheme();
-  initializeITSBackground();
+  initializeCADBlueprintBackground();
   initializeNav();
   initializeFilters();
   initializeCitationModal();
@@ -49,16 +49,22 @@ function initializeTheme() {
 }
 
 /* --------------------------------------------------------------------------
-   2. INTELLIGENT TRANSPORTATION SYSTEM (ITS) CANVAS BACKGROUND
+   2. CIVIL ENGINEERING STRUCTURAL BLUEPRINT & CAD GRID CANVAS
    -------------------------------------------------------------------------- */
-function initializeITSBackground() {
+function initializeCADBlueprintBackground() {
   const canvas = document.getElementById('its-canvas');
+  const heroSection = document.getElementById('hero') || canvas?.parentElement;
   if (!canvas) return;
 
   const ctx = canvas.getContext('2d');
   let width, height, dpr;
-  let nodes = [];
-  const maxNodes = 45;
+
+  // CAD Mouse Tracking State (Lerped for ultra-smooth movement)
+  let targetMouse = { x: -1000, y: -1000, active: false };
+  let currentMouse = { x: -1000, y: -1000 };
+
+  // Structural Member Nodes (Simulating structural truss & coordinate grid)
+  let structuralNodes = [];
 
   function resize() {
     dpr = window.devicePixelRatio || 1;
@@ -67,23 +73,44 @@ function initializeITSBackground() {
     canvas.width = width * dpr;
     canvas.height = height * dpr;
     ctx.scale(dpr, dpr);
-    createNodes();
+    createStructuralNodes();
   }
 
   window.addEventListener('resize', resize);
 
-  function createNodes() {
-    nodes = [];
-    for (let i = 0; i < maxNodes; i++) {
-      nodes.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.8,
-        vy: (Math.random() - 0.5) * 0.8,
-        radius: Math.random() * 2.5 + 1.5,
-        pulse: Math.random() * Math.PI,
-        type: Math.random() > 0.7 ? 'signal' : 'node'
-      });
+  // Track mouse over hero section
+  if (heroSection) {
+    heroSection.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      targetMouse.x = e.clientX - rect.left;
+      targetMouse.y = e.clientY - rect.top;
+      targetMouse.active = true;
+    });
+
+    heroSection.addEventListener('mouseleave', () => {
+      targetMouse.active = false;
+    });
+  }
+
+  function createStructuralNodes() {
+    structuralNodes = [];
+    const gridCols = Math.ceil(width / 160);
+    const gridRows = Math.ceil(height / 120);
+
+    for (let r = 0; r <= gridRows; r++) {
+      for (let c = 0; c <= gridCols; c++) {
+        const baseX = c * 160 + (r % 2 === 0 ? 0 : 40);
+        const baseY = r * 120 + 30;
+        
+        structuralNodes.push({
+          x: baseX + (Math.random() - 0.5) * 30,
+          y: baseY + (Math.random() - 0.5) * 20,
+          baseX: baseX,
+          baseY: baseY,
+          pulse: Math.random() * Math.PI * 2,
+          isPinned: r === gridRows || Math.random() > 0.85
+        });
+      }
     }
   }
 
@@ -91,44 +118,154 @@ function initializeITSBackground() {
     ctx.clearRect(0, 0, width, height);
 
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    // Executive Blueprint Cyan & Geospatial Teal Node colors
-    const nodeColor = isDark ? 'rgba(56, 189, 248, 0.7)' : 'rgba(2, 132, 199, 0.65)';
-    const lineColor = isDark ? 'rgba(45, 212, 191, 0.15)' : 'rgba(13, 148, 136, 0.14)';
-    const signalColor = isDark ? '#fbbf24' : '#d97706';
 
-    // Draw connecting paths (representing transportation network)
-    for (let i = 0; i < nodes.length; i++) {
-      for (let j = i + 1; j < nodes.length; j++) {
-        const dx = nodes[i].x - nodes[j].x;
-        const dy = nodes[i].y - nodes[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+    // Civil CAD & Blueprint Color Palette
+    const gridMinorColor = isDark ? 'rgba(56, 189, 248, 0.05)' : 'rgba(2, 132, 199, 0.06)';
+    const gridMajorColor = isDark ? 'rgba(56, 189, 248, 0.12)' : 'rgba(2, 132, 199, 0.12)';
+    const axisTickColor = isDark ? 'rgba(56, 189, 248, 0.25)' : 'rgba(2, 132, 199, 0.25)';
+    const trussLineColor = isDark ? 'rgba(45, 212, 191, 0.18)' : 'rgba(13, 148, 136, 0.16)';
+    const nodeColor = isDark ? 'rgba(56, 189, 248, 0.65)' : 'rgba(2, 132, 199, 0.6)';
+    const crosshairColor = isDark ? 'rgba(56, 189, 248, 0.35)' : 'rgba(2, 132, 199, 0.35)';
+    const coordTextColor = isDark ? 'rgba(186, 230, 253, 0.65)' : 'rgba(14, 116, 144, 0.75)';
 
-        if (dist < 130) {
-          ctx.beginPath();
-          ctx.moveTo(nodes[i].x, nodes[i].y);
-          ctx.lineTo(nodes[j].x, nodes[j].y);
-          ctx.strokeStyle = lineColor;
-          ctx.lineWidth = 1 - dist / 130;
-          ctx.stroke();
-        }
+    // Smooth Mouse Interpolation (Lerp)
+    if (targetMouse.active) {
+      if (currentMouse.x === -1000) {
+        currentMouse.x = targetMouse.x;
+        currentMouse.y = targetMouse.y;
+      } else {
+        currentMouse.x += (targetMouse.x - currentMouse.x) * 0.1;
+        currentMouse.y += (targetMouse.y - currentMouse.y) * 0.1;
+      }
+    } else {
+      currentMouse.x += (width * 0.5 - currentMouse.x) * 0.02;
+      currentMouse.y += (height * 0.4 - currentMouse.y) * 0.02;
+    }
+
+    const minorSize = 20;
+    const majorSize = 80;
+
+    // 1. DRAW MINOR BLUEPRINT GRID LINES
+    ctx.beginPath();
+    ctx.setLineDash([]);
+    ctx.strokeStyle = gridMinorColor;
+    ctx.lineWidth = 0.5;
+
+    for (let x = 0; x < width; x += minorSize) {
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, height);
+    }
+    for (let y = 0; y < height; y += minorSize) {
+      ctx.moveTo(0, y);
+      ctx.lineTo(width, y);
+    }
+    ctx.stroke();
+
+    // 2. DRAW MAJOR BLUEPRINT GRID LINES
+    ctx.beginPath();
+    ctx.strokeStyle = gridMajorColor;
+    ctx.lineWidth = 1;
+
+    for (let x = 0; x < width; x += majorSize) {
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, height);
+    }
+    for (let y = 0; y < height; y += majorSize) {
+      ctx.moveTo(0, y);
+      ctx.lineTo(width, y);
+    }
+    ctx.stroke();
+
+    // 3. DRAW MAJOR GRID INTERSECTION CROSSES (+)
+    ctx.strokeStyle = axisTickColor;
+    ctx.lineWidth = 1;
+    const tickLen = 4;
+    for (let x = 0; x < width; x += majorSize) {
+      for (let y = 0; y < height; y += majorSize) {
+        ctx.beginPath();
+        ctx.moveTo(x - tickLen, y);
+        ctx.lineTo(x + tickLen, y);
+        ctx.moveTo(x, y - tickLen);
+        ctx.lineTo(x, y + tickLen);
+        ctx.stroke();
       }
     }
 
-    // Draw nodes
-    nodes.forEach(node => {
-      node.x += node.vx;
-      node.y += node.vy;
+    // 4. DRAW STRUCTURAL TRUSS MEMBERS & NODES
+    structuralNodes.forEach((node, i) => {
+      node.pulse += 0.015;
+      node.x = node.baseX + Math.sin(node.pulse) * 6;
+      node.y = node.baseY + Math.cos(node.pulse * 0.8) * 4;
 
-      if (node.x < 0 || node.x > width) node.vx *= -1;
-      if (node.y < 0 || node.y > height) node.vy *= -1;
+      for (let j = i + 1; j < structuralNodes.length; j++) {
+        const other = structuralNodes[j];
+        const dx = node.x - other.x;
+        const dy = node.y - other.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
 
-      node.pulse += 0.03;
+        if (dist < 170) {
+          ctx.beginPath();
+          ctx.moveTo(node.x, node.y);
+          ctx.lineTo(other.x, other.y);
+          ctx.strokeStyle = trussLineColor;
+          ctx.lineWidth = Math.max(0.4, 1.2 - dist / 170);
+          ctx.stroke();
+        }
+      }
 
       ctx.beginPath();
-      ctx.arc(node.x, node.y, node.radius + Math.sin(node.pulse) * 0.5, 0, Math.PI * 2);
-      ctx.fillStyle = node.type === 'signal' ? signalColor : nodeColor;
+      ctx.arc(node.x, node.y, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = nodeColor;
       ctx.fill();
+
+      if (node.isPinned) {
+        ctx.beginPath();
+        ctx.moveTo(node.x, node.y + 3);
+        ctx.lineTo(node.x - 4, node.y + 9);
+        ctx.lineTo(node.x + 4, node.y + 9);
+        ctx.closePath();
+        ctx.strokeStyle = axisTickColor;
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
+      }
     });
+
+    // 5. DRAW DYNAMIC CAD CURSOR CROSSHAIR & HUD READOUT
+    if (targetMouse.active && currentMouse.x >= 0 && currentMouse.y >= 0) {
+      const cx = currentMouse.x;
+      const cy = currentMouse.y;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = crosshairColor;
+      ctx.lineWidth = 1;
+
+      ctx.moveTo(0, cy);
+      ctx.lineTo(width, cy);
+      ctx.moveTo(cx, 0);
+      ctx.lineTo(cx, height);
+      ctx.stroke();
+
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+      ctx.strokeStyle = crosshairColor;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, 2, 0, Math.PI * 2);
+      ctx.fillStyle = isDark ? '#38bdf8' : '#0284c7';
+      ctx.fill();
+
+      const coordText = `CAD :: X ${Math.round(cx)} . Y ${Math.round(cy)}`;
+      ctx.font = '10px "JetBrains Mono", monospace';
+      ctx.fillStyle = coordTextColor;
+      ctx.fillText(coordText, cx + 18, cy - 10);
+
+      ctx.restore();
+    }
 
     requestAnimationFrame(draw);
   }
