@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initializeCitationModal();
   initializeCommandPalette();
   initializeScrollAnimations();
+  initializeContactForm();
 });
 
 /* --------------------------------------------------------------------------
@@ -561,3 +562,25 @@ function initializeScrollAnimations() {
     observer.observe(el);
   });
 }
+
+/* --------------------------------------------------------------------------
+   8. CONTACT FORM SUBMISSION TO AHNAF@CE.UIU.AC.BD
+   -------------------------------------------------------------------------- */
+function initializeContactForm() {
+  const form = document.getElementById('contactForm');
+  if (!form) return;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name')?.value || '';
+    const email = document.getElementById('email')?.value || '';
+    const subject = document.getElementById('subject')?.value || 'Academic / Portfolio Inquiry';
+    const message = document.getElementById('message')?.value || '';
+
+    const bodyText = `Name: ${name}\nSender Email: ${email}\n\nMessage:\n${message}`;
+    const mailtoUrl = `mailto:ahnaf@ce.uiu.ac.bd?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+
+    window.location.href = mailtoUrl;
+  });
+}
+

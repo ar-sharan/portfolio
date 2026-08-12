@@ -1,6 +1,6 @@
 # Ahnaf Rafi Sharan
 
-**Pabna-6600, Bangladesh** · ahnafrafi@iut-dhaka.edu · +8801796549094
+**Pabna-6600, Bangladesh** · ahnaf@ce.uiu.ac.bd · +8801796549094
 
 LinkedIn: [linkedin.com/in/ahnaf-rafi-sharan-06a0391b3](https://linkedin.com/in/ahnaf-rafi-sharan-06a0391b3)
 
