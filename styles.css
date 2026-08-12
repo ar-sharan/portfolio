@@ -746,6 +746,115 @@ button {
   color: var(--text-muted);
 }
 
+/* Achievements Card inside Academic & Background section */
+.achievements-card {
+  margin-top: 2.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.achievements-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.achievements-card-title {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--accent-gold);
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.achievement-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.25rem;
+  background: var(--bg-surface-soft);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.achievement-item:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-2px);
+}
+
+.achievement-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+.achievement-badge.runner-up {
+  background: rgba(212, 175, 55, 0.15);
+  color: var(--accent-gold);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.achievement-badge.third-place {
+  background: rgba(45, 212, 191, 0.15);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(45, 212, 191, 0.3);
+}
+
+.achievement-details {
+  flex: 1;
+}
+
+.achievement-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+}
+
+.achievement-event {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.achievement-org {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+}
+
+.achievement-org i {
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
 /* --------------------------------------------------------------------------
    6. TEACHING & ACADEMIA SECTION
    -------------------------------------------------------------------------- */
