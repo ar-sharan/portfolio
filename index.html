@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfolio of Ahnaf Rafi Sharan — Civil & Environmental Engineer, University Lecturer at UIU, and M.Sc. Scholar specializing in Intelligent Transportation Systems, Spatial Crash Prediction, and Machine Learning.">
+  <meta name="keywords" content="Ahnaf Rafi Sharan, Civil Engineer, Transportation Engineering, UIU Lecturer, IUT, Spatial Crash Prediction, ITS, QGIS, SUMO, ETABS, PLAXIS 3D">
+  <title>Ahnaf Rafi Sharan | Civil Engineer & University Lecturer</title>
+
+  <!-- Canonical & Social Meta -->
+  <meta property="og:title" content="Ahnaf Rafi Sharan | Academic Portfolio">
+  <meta property="og:description" content="Lecturer in Civil Engineering at UIU & M.Sc. Scholar at IUT. Research in Intelligent Transportation Systems, Machine Learning in Road Safety, and Geotechnical Engineering.">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Top Scroll Progress Bar -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- Floating Navigation Bar -->
+  <header class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="#hero" class="nav-brand" aria-label="Ahnaf Rafi Sharan Home">
+        <img src="hero.png" alt="Ahnaf Rafi Sharan Avatar" class="brand-avatar">
+        <div class="brand-text">
+          <span class="brand-name">Ahnaf Rafi Sharan</span>
+          <span class="brand-title">Civil Engineer & Lecturer</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="#hero" class="nav-link active">Home</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#teaching" class="nav-link">Teaching</a></li>
+          <li><a href="#research" class="nav-link">Research</a></li>
+          <li><a href="#projects" class="nav-link">Projects</a></li>
+          <li><a href="#skills" class="nav-link">Skills</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="cmd-badge" id="cmdToggleBtn" type="button" aria-label="Open Command Palette">
+          <i class="fas fa-search" aria-hidden="true"></i>
+          <span>Search</span>
+          <kbd>⌘K</kbd>
+        </button>
+
+        <button class="btn-icon" id="themeToggleBtn" type="button" aria-label="Toggle Light and Dark Theme">
+          <i class="fas fa-moon" id="themeIcon" aria-hidden="true"></i>
+        </button>
+
+        <a href="cv.pdf" class="btn btn-primary btn-sm" download aria-label="Download CV PDF">
+          <i class="fas fa-file-pdf" aria-hidden="true"></i>
+          <span>CV</span>
+        </a>
+
+        <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navMenu" aria-label="Toggle Navigation Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- 1. HERO SECTION -->
+    <section id="hero" class="section hero">
+      <canvas id="its-canvas"></canvas>
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <div class="hero-badge-group">
+            <span class="hero-badge"><i class="fas fa-university"></i> Lecturer @ UIU</span>
+            <span class="hero-badge"><i class="fas fa-graduation-cap"></i> M.Sc. Scholar @ IUT</span>
+            <span class="hero-badge"><i class="fas fa-award"></i> Rank 3rd / 96 (B.Sc.)</span>
+          </div>
+
+          <h1 class="hero-name">
+            Ahnaf Rafi <span class="highlight">Sharan</span>
+          </h1>
+
+          <div class="hero-title-role">
+            <i class="fas fa-route"></i> Civil & Environmental Engineer
+          </div>
+
+          <p class="hero-bio">
+            Academic researcher and lecturer advancing <strong>Intelligent Transportation Systems (ITS)</strong>, <strong>Spatial Crash Prediction Modeling</strong>, and machine learning applications in road safety & geotechnical infrastructure.
+          </p>
+
+          <div class="hero-cta">
+            <a href="#research" class="btn btn-primary">
+              <i class="fas fa-book-open"></i> Explore Research
+            </a>
+            <a href="cv.pdf" class="btn btn-secondary" download>
+              <i class="fas fa-download"></i> Download CV
+            </a>
+            <a href="https://linkedin.com/in/ahnaf-rafi-sharan-06a0391b3" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+              <i class="fab fa-linkedin"></i> LinkedIn
+            </a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-number">3.91</span>
+              <span class="stat-label">B.Sc. CGPA (Rank 3rd)</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">5+</span>
+              <span class="stat-label">Papers & Proceedings</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">250+</span>
+              <span class="stat-label">Boreholes Analyzed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- HERO PORTRAIT FRAME -->
+        <div class="hero-visual">
+          <div class="profile-frame">
+            <img src="hero.png" alt="Ahnaf Rafi Sharan — Civil Engineer & University Lecturer" class="profile-img">
+            <div class="profile-status-badge">
+              <span class="status-indicator"></span> Lecturer @ UIU · Researcher
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. ABOUT & ACADEMIC BACKGROUND -->
+    <section id="about" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag"><i class="fas fa-user-academic"></i> Background</span>
+          <h2 class="section-title">Academic & Professional Journey</h2>
+          <p class="section-subtitle">Dedicated to academic excellence, innovative infrastructure research, and university-level education.</p>
+        </div>
+
+        <div class="academic-grid">
+          <!-- Education Timeline -->
+          <div class="timeline-card">
+            <h3 class="timeline-title"><i class="fas fa-graduation-cap"></i> Education</h3>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">11/2025 – PRESENT</div>
+                <div class="timeline-role">M.Sc. in Civil and Environmental Engineering</div>
+                <div class="timeline-org">Islamic University of Technology (IUT), Gazipur</div>
+                <p class="timeline-desc">CGPA: <strong>3.75 / 4.00</strong> (Most Recent Semester). Focusing on advanced transportation systems and crash prediction models.</p>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">06/2021 – 10/2025</div>
+                <div class="timeline-role">B.Sc. in Civil and Environmental Engineering</div>
+                <div class="timeline-org">Islamic University of Technology (IUT), Gazipur</div>
+                <p class="timeline-desc">CGPA: <strong>3.91 / 4.00</strong> (Ranked <strong>3rd out of 96</strong> students).</p>
+                <div class="courses-list">
+                  <span class="course-chip">Multimodal Traffic Analytics</span>
+                  <span class="course-chip">ITS</span>
+                  <span class="course-chip">AI Traffic Flow</span>
+                  <span class="course-chip">Digital Twins</span>
+                  <span class="course-chip">Highway & Airport Pavement</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Professional Experience Timeline -->
+          <div class="timeline-card">
+            <h3 class="timeline-title"><i class="fas fa-briefcase"></i> Experience & Training</h3>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">11/2025 – PRESENT</div>
+                <div class="timeline-role">Lecturer, Dept. of Civil Engineering</div>
+                <div class="timeline-org">United International University (UIU), Dhaka</div>
+                <p class="timeline-desc">Conducting undergraduate courses and lab sessions in GIS & Remote Sensing, Engineering Hydrology, and Engineering Geology.</p>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">03/2024 – 03/2024</div>
+                <div class="timeline-role">Industrial Trainee</div>
+                <div class="timeline-org">SMEC (Bangladesh) Ltd., Dhaka</div>
+                <p class="timeline-desc">Gained practical exposure to major national infrastructure consulting, highway design, and project planning methodologies.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. TEACHING & ACADEMIA SECTION -->
+    <section id="teaching" class="section" style="background: var(--bg-surface-soft);">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag"><i class="fas fa-chalkboard-teacher"></i> Teaching</span>
+          <h2 class="section-title">Courses Taught at UIU</h2>
+          <p class="section-subtitle">Empowering future civil engineers with practical lab skills, geospatial analytics, and hydrology fundamentals.</p>
+        </div>
+
+        <div class="teaching-grid">
+          <div class="teaching-card">
+            <div class="teaching-code">CE LAB 300+</div>
+            <h3 class="teaching-title">GIS and Remote Sensing Lab</h3>
+            <div class="teaching-institution"><i class="fas fa-university"></i> United International University</div>
+            <p class="teaching-desc">Hands-on practical instruction using QGIS for spatial data manipulation, coordinate systems, digital elevation modeling (DEM), and infrastructure mapping.</p>
+            <div class="teaching-topics">
+              <div class="topic-item"><i class="fas fa-check-circle"></i> QGIS Vector & Raster Spatial Analytics</div>
+              <div class="topic-item"><i class="fas fa-check-circle"></i> Satellite Image Processing & Encroachment Mapping</div>
+            </div>
+          </div>
+
+          <div class="teaching-card">
+            <div class="teaching-code">CE CORE 300+</div>
+            <h3 class="teaching-title">Engineering Hydrology</h3>
+            <div class="teaching-institution"><i class="fas fa-university"></i> United International University</div>
+            <p class="teaching-desc">Theoretical and applied principles of the hydrologic cycle, rainfall-runoff modeling, hydrographs, flood routing, and watershed management.</p>
+            <div class="teaching-topics">
+              <div class="topic-item"><i class="fas fa-check-circle"></i> Precipitation Analysis & Evapotranspiration</div>
+              <div class="topic-item"><i class="fas fa-check-circle"></i> Unit Hydrograph Derivation & Peak Runoff</div>
+            </div>
+          </div>
+
+          <div class="teaching-card">
+            <div class="teaching-code">CE CORE 200+</div>
+            <h3 class="teaching-title">Engineering Geology & Geomorphology</h3>
+            <div class="teaching-institution"><i class="fas fa-university"></i> United International University</div>
+            <p class="teaching-desc">Fundamentals of rock and soil formation, geological hazards, slope stability, geomorphological processes, and site investigation for civil engineering structures.</p>
+            <div class="teaching-topics">
+              <div class="topic-item"><i class="fas fa-check-circle"></i> Rock & Mineral Identification</div>
+              <div class="topic-item"><i class="fas fa-check-circle"></i> Structural Geology & Geological Maps</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. RESEARCH & PUBLICATIONS SECTION -->
+    <section id="research" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag"><i class="fas fa-microscope"></i> Publications</span>
+          <h2 class="section-title">Research & Scholarly Work</h2>
+          <p class="section-subtitle">Peer-reviewed journal articles and international conference proceedings in transportation safety and materials science.</p>
+        </div>
+
+        <div class="filter-bar">
+          <button class="filter-btn active" data-filter="all">All Publications</button>
+          <button class="filter-btn" data-filter="journal">Journal Articles</button>
+          <button class="filter-btn" data-filter="conference">Conference Papers</button>
+        </div>
+
+        <div class="pub-list">
+
+          <!-- Pub 1 -->
+          <div class="pub-card" data-category="journal">
+            <div class="pub-info">
+              <div class="pub-meta">
+                <span class="pub-type journal">Journal Paper</span>
+                <span class="pub-year">2026</span>
+              </div>
+              <h3 class="pub-title">Impact of unauthorized vehicles on road safety using machine learning in Bangladesh</h3>
+              <p class="pub-authors">Haque, M. R., Hossain, M. N., <strong>Sharan, A. R.</strong>, Aman, N., Miah, A. S. M., Istiqphara, S., & Ferdous, M. F.</p>
+              <div class="pub-venue">International Journal of Engineering (e-ISSN 1735-9244)</div>
+              <div class="pub-actions">
+                <a href="https://www.ije.ir" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-external-link-alt"></i> IJE Journal Portal
+                </a>
+                <a href="https://www.researchgate.net/search/publication?q=Impact+of+unauthorized+vehicles+on+road+safety+using+machine+learning+in+Bangladesh" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fab fa-researchgate"></i> ResearchGate
+                </a>
+                <button class="btn btn-secondary btn-sm cite-btn" data-bibtex="@article{haque2026impact,
+  title={Impact of unauthorized vehicles on road safety using machine learning in Bangladesh},
+  author={Haque, M. R. and Hossain, M. N. and Sharan, Ahnaf Rafi and Aman, N. and Miah, A. S. M. and Istiqphara, S. and Ferdous, M. F.},
+  journal={International Journal of Engineering},
+  year={2026},
+  issn={1735-9244}
+}">
+                  <i class="fas fa-quote-right"></i> Cite / BibTeX
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pub 2 -->
+          <div class="pub-card" data-category="conference">
+            <div class="pub-info">
+              <div class="pub-meta">
+                <span class="pub-type conference">TRB 2026 Conference</span>
+                <span class="pub-year">2026</span>
+              </div>
+              <h3 class="pub-title">Developing spatial crash prediction model for highways considering land use & encroachment</h3>
+              <p class="pub-authors">Uddin, N., Tasnim, A., <strong>Rafi, A.</strong>, Raihan, M. A., Hossain, M., Fletcher, J., & Rahman, A. S.</p>
+              <div class="pub-venue">Paper presented at the 105th Transportation Research Board (TRB 2026) Annual Meeting, Washington, D.C., USA (Jan 11–15, 2026)</div>
+              <div class="pub-actions">
+                <a href="https://www.trb.org/AnnualMeeting/AnnualMeeting.aspx" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-landmark"></i> TRB 2026 Meeting
+                </a>
+                <a href="https://trid.trb.org/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-database"></i> TRID Catalog
+                </a>
+                <a href="https://www.researchgate.net/search/publication?q=Developing+spatial+crash+prediction+model+for+highways+considering+land+use" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fab fa-researchgate"></i> ResearchGate
+                </a>
+                <button class="btn btn-secondary btn-sm cite-btn" data-bibtex="@inproceedings{uddin2026developing,
+  title={Developing spatial crash prediction model for highways considering land use \& encroachment},
+  author={Uddin, N. and Tasnim, A. and Rafi, A. and Raihan, M. A. and Hossain, M. and Fletcher, J. and Rahman, A. S.},
+  booktitle={105th TRB Annual Meeting},
+  address={Washington, D.C., USA},
+  year={2026}
+}">
+                  <i class="fas fa-quote-right"></i> Cite / BibTeX
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pub 3 -->
+          <div class="pub-card" data-category="conference">
+            <div class="pub-info">
+              <div class="pub-meta">
+                <span class="pub-type conference">EASTS 2025 Conference</span>
+                <span class="pub-year">2025</span>
+              </div>
+              <h3 class="pub-title">Land use, encroachment and built environment on traffic: Assessing crash risks considering the safety-critical interaction</h3>
+              <p class="pub-authors">Uddin, N., Tasnim, A., <strong>Rafi, A.</strong>, Raihan, M. A., & Hossain, M.</p>
+              <div class="pub-venue">16th International Conference of Eastern Asia Society for Transportation Studies (EASTS 2025), Surakarta, Indonesia</div>
+              <div class="pub-actions">
+                <a href="https://www.jstage.jst.go.jp/browse/easts" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-journal-whills"></i> J-STAGE EASTS Repository
+                </a>
+                <a href="http://www.easts.info/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-globe"></i> EASTS Portal
+                </a>
+                <a href="https://www.researchgate.net/search/publication?q=Land+use+encroachment+and+built+environment+on+traffic" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fab fa-researchgate"></i> ResearchGate
+                </a>
+                <button class="btn btn-secondary btn-sm cite-btn" data-bibtex="@inproceedings{uddin2025landuse,
+  title={Land use, encroachment and built environment on traffic: Assessing crash risks considering the safety-critical interaction},
+  author={Uddin, N. and Tasnim, A. and Rafi, A. and Raihan, M. A. and Hossain, M.},
+  booktitle={16th EASTS Conference},
+  address={Surakarta, Indonesia},
+  year={2025}
+}">
+                  <i class="fas fa-quote-right"></i> Cite / BibTeX
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pub 4 -->
+          <div class="pub-card" data-category="conference">
+            <div class="pub-info">
+              <div class="pub-meta">
+                <span class="pub-type conference">IUT-ICCET 2024</span>
+                <span class="pub-year">2024</span>
+              </div>
+              <h3 class="pub-title">Utilization of recycled brick aggregate to ensure circular economy</h3>
+              <p class="pub-authors">Mohammed, T. U., Uddin, N., & <strong>Rafi, A.</strong></p>
+              <div class="pub-venue">IUT Journal of Engineering and Technology (JET), Special Issue (Vol. 19 No. 3), pp. 848–854</div>
+              <div class="pub-actions">
+                <a href="https://jet.iutoic-dhaka.edu/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-university"></i> IUT JET Portal
+                </a>
+                <a href="https://www.researchgate.net/search/publication?q=Utilization+of+recycled+brick+aggregate+to+ensure+circular+economy" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fab fa-researchgate"></i> ResearchGate
+                </a>
+                <button class="btn btn-secondary btn-sm cite-btn" data-bibtex="@article{mohammed2024utilization,
+  title={Utilization of recycled brick aggregate to ensure circular economy},
+  author={Mohammed, T. U. and Uddin, N. and Rafi, A.},
+  journal={IUT Journal of Engineering and Technology (JET)},
+  volume={19},
+  number={3},
+  pages={848--854},
+  year={2024}
+}">
+                  <i class="fas fa-quote-right"></i> Cite / BibTeX
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pub 5 -->
+          <div class="pub-card" data-category="journal">
+            <div class="pub-info">
+              <div class="pub-meta">
+                <span class="pub-type journal">Journal Paper</span>
+                <span class="pub-year">2023</span>
+              </div>
+              <h3 class="pub-title">Prediction of strength properties of soft soil considering simple soil parameters</h3>
+              <p class="pub-authors">Hoque, M. J., Bayezid, M., <strong>Sharan, A. R.</strong>, Kabir, M. U., & Tareque, T.</p>
+              <div class="pub-venue">Open Journal of Civil Engineering, Vol. 13, pp. 479–496 (DOI: 10.4236/ojce.2023.133035)</div>
+              <div class="pub-actions">
+                <a href="https://doi.org/10.4236/ojce.2023.133035" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-external-link-alt"></i> Verified DOI
+                </a>
+                <a href="https://www.scirp.org/journal/paperinformation.aspx?paperid=127814" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-file-alt"></i> SCIRP Article
+                </a>
+                <button class="btn btn-secondary btn-sm cite-btn" data-bibtex="@article{hoque2023prediction,
+  title={Prediction of strength properties of soft soil considering simple soil parameters},
+  author={Hoque, M. J. and Bayezid, M. and Sharan, Ahnaf Rafi and Kabir, M. U. and Tareque, T.},
+  journal={Open Journal of Civil Engineering},
+  volume={13},
+  pages={479--496},
+  year={2023},
+  doi={10.4236/ojce.2023.133035}
+}">
+                  <i class="fas fa-quote-right"></i> Cite / BibTeX
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. FEATURED PROJECTS SECTION -->
+    <section id="projects" class="section" style="background: var(--bg-surface-soft);">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag"><i class="fas fa-drafting-compass"></i> Engineering Projects</span>
+          <h2 class="section-title">Major Design & Research Projects</h2>
+          <p class="section-subtitle">Integrated structural, geotechnical, and transportation engineering projects.</p>
+        </div>
+
+        <div class="projects-grid">
+
+          <!-- FYDP Project -->
+          <div class="project-card">
+            <div>
+              <div class="project-category">Final Year Design Project (FYDP)</div>
+              <h3 class="project-title">Eight-Story Residential Building Design & Traffic Impact Assessment</h3>
+              <p class="project-desc">
+                Integrated structural analysis using ETABS, mat/pile foundation settlement modeling in PLAXIS 3D, rainwater harvesting design via E-Tank, and Traffic Impact Assessment (TIA) with SUMO microsimulation in Kishoreganj.
+              </p>
+            </div>
+            <div>
+              <div class="project-tools">
+                <span class="tool-tag">PLAXIS 3D</span>
+                <span class="tool-tag">ETABS</span>
+                <span class="tool-tag">SUMO</span>
+                <span class="tool-tag">E-Tank</span>
+                <span class="tool-tag">AutoCAD</span>
+              </div>
+              <div class="pub-actions">
+                <a href="https://eclipse.dev/sumo/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-code-branch"></i> SUMO Docs
+                </a>
+                <a href="https://www.csiamerica.com/products/etabs" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-building"></i> ETABS Spec
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 2 -->
+          <div class="project-card">
+            <div>
+              <div class="project-category">Highway Crash Risk Analytics</div>
+              <h3 class="project-title">Dhaka–Sylhet National Highway (N2) Crash Prediction Model</h3>
+              <p class="project-desc">
+                Compiled crash dataset across National Highway N2. Developed a Negative Binomial Regression model combined with QGIS spatial analysis to map land use and roadside encroachment safety risks.
+              </p>
+            </div>
+            <div>
+              <div class="project-tools">
+                <span class="tool-tag">QGIS</span>
+                <span class="tool-tag">Python</span>
+                <span class="tool-tag">Negative Binomial</span>
+                <span class="tool-tag">Spatial Analysis</span>
+              </div>
+              <div class="pub-actions">
+                <a href="https://www.qgis.org" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-globe"></i> QGIS Platform
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 3 -->
+          <div class="project-card">
+            <div>
+              <div class="project-category">Geotechnical Modeling</div>
+              <h3 class="project-title">Soft Soil Strength Analytics from 250 Boreholes</h3>
+              <p class="project-desc">
+                Extracted and analyzed soft-soil geotechnical borehole records across Dhaka City. Derived empirical statistical equations connecting index soil properties with unconfined compressive strength.
+              </p>
+            </div>
+            <div>
+              <div class="project-tools">
+                <span class="tool-tag">Data Analytics</span>
+                <span class="tool-tag">Python</span>
+                <span class="tool-tag">Geotechnical</span>
+                <span class="tool-tag">Regression</span>
+              </div>
+              <div class="pub-actions">
+                <a href="https://doi.org/10.4236/ojce.2023.133035" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-external-link-alt"></i> Related Paper
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. SKILLS & TOOLKIT SECTION -->
+    <section id="skills" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag"><i class="fas fa-tools"></i> Technical Toolkit</span>
+          <h2 class="section-title">Software & Engineering Skills</h2>
+          <p class="section-subtitle">Industry-standard simulation, geospatial analysis, CAD, and data modeling tools.</p>
+        </div>
+
+        <div class="skills-grid">
+          <!-- Category 1 -->
+          <div class="skill-category">
+            <h3 class="category-title"><i class="fas fa-laptop-code"></i> Simulation & CAD Software</h3>
+            <div class="skills-tags">
+              <span class="skill-badge"><i class="fas fa-draw-polygon"></i> AutoCAD</span>
+              <span class="skill-badge"><i class="fas fa-globe-americas"></i> QGIS</span>
+              <span class="skill-badge"><i class="fas fa-car-side"></i> SUMO</span>
+              <span class="skill-badge"><i class="fas fa-road"></i> VISSIM</span>
+              <span class="skill-badge"><i class="fas fa-project-diagram"></i> CUBE</span>
+              <span class="skill-badge"><i class="fas fa-building"></i> ETABS</span>
+              <span class="skill-badge"><i class="fas fa-cubes"></i> SAP2000</span>
+              <span class="skill-badge"><i class="fas fa-tint"></i> E-Tank</span>
+              <span class="skill-badge"><i class="fas fa-book"></i> Zotero</span>
+            </div>
+          </div>
+
+          <!-- Category 2 -->
+          <div class="skill-category">
+            <h3 class="category-title"><i class="fas fa-code"></i> Programming & Analytics</h3>
+            <div class="skills-tags">
+              <span class="skill-badge"><i class="fab fa-python"></i> Python</span>
+              <span class="skill-badge"><i class="fas fa-chart-bar"></i> Matplotlib</span>
+              <span class="skill-badge"><i class="fas fa-chart-line"></i> Seaborn</span>
+              <span class="skill-badge"><i class="fas fa-calculator"></i> Data Analytics</span>
+              <span class="skill-badge"><i class="fas fa-file-excel"></i> MS Excel</span>
+            </div>
+          </div>
+
+          <!-- Category 3 -->
+          <div class="skill-category">
+            <h3 class="category-title"><i class="fas fa-users"></i> Leadership & Organizations</h3>
+            <div class="skills-tags">
+              <span class="skill-badge"><i class="fas fa-star"></i> CENNOVATION 2025 (Asst. Gen. Sec.)</span>
+              <span class="skill-badge"><i class="fas fa-layer-group"></i> ACI Student Chapter (Design Lead)</span>
+              <span class="skill-badge"><i class="fas fa-traffic-light"></i> ITE Student Chapter (Technical Exec)</span>
+              <span class="skill-badge"><i class="fas fa-language"></i> IELTS Band 7.5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CONTACT SECTION -->
+    <section id="contact" class="section" style="background: var(--bg-surface-soft);">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag"><i class="fas fa-envelope"></i> Contact</span>
+          <h2 class="section-title">Get in Touch</h2>
+          <p class="section-subtitle">Open for research collaborations, academic inquiries, and professional networking.</p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-info">
+            <a href="mailto:ahnafrafi@iut-dhaka.edu" class="contact-card">
+              <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+              <div class="contact-details">
+                <h4>Email Address</h4>
+                <p>ahnafrafi@iut-dhaka.edu</p>
+              </div>
+            </a>
+
+            <a href="tel:+8801796549094" class="contact-card">
+              <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+              <div class="contact-details">
+                <h4>Phone / WhatsApp</h4>
+                <p>+880 1796-549094</p>
+              </div>
+            </a>
+
+            <a href="https://linkedin.com/in/ahnaf-rafi-sharan-06a0391b3" target="_blank" rel="noopener noreferrer" class="contact-card">
+              <div class="contact-icon"><i class="fab fa-linkedin-in"></i></div>
+              <div class="contact-details">
+                <h4>LinkedIn Profile</h4>
+                <p>linkedin.com/in/ahnaf-rafi-sharan</p>
+              </div>
+            </a>
+
+            <div class="contact-card">
+              <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+              <div class="contact-details">
+                <h4>Primary Location</h4>
+                <p>Dhaka & Pabna-6600, Bangladesh</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form-container">
+            <form id="contactForm" onsubmit="event.preventDefault(); alert('Thank you for reaching out! Message received.');">
+              <div class="form-group">
+                <label for="name" class="form-label">Your Name</label>
+                <input type="text" id="name" class="form-control" placeholder="Dr. John Doe" required>
+              </div>
+
+              <div class="form-group">
+                <label for="email" class="form-label">Your Email</label>
+                <input type="email" id="email" class="form-control" placeholder="john@university.edu" required>
+              </div>
+
+              <div class="form-group">
+                <label for="subject" class="form-label">Subject</label>
+                <input type="text" id="subject" class="form-control" placeholder="Research Inquiry / Collaboration" required>
+              </div>
+
+              <div class="form-group">
+                <label for="message" class="form-label">Message</label>
+                <textarea id="message" class="form-control" placeholder="Write your message here..." required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%;">
+                <i class="fas fa-paper-plane"></i> Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="brand-name">Ahnaf Rafi Sharan</div>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">Lecturer in Civil Engineering @ UIU · M.Sc. Candidate @ IUT</p>
+      <div class="footer-socials">
+        <a href="mailto:ahnafrafi@iut-dhaka.edu" class="btn-icon" aria-label="Email"><i class="fas fa-envelope"></i></a>
+        <a href="https://linkedin.com/in/ahnaf-rafi-sharan-06a0391b3" target="_blank" rel="noopener noreferrer" class="btn-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="cv.pdf" download class="btn-icon" aria-label="CV Download"><i class="fas fa-file-pdf"></i></a>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 1rem;">
+        &copy; 2026 Ahnaf Rafi Sharan. Built with precision & scholarly aesthetic.
+      </p>
+    </div>
+  </footer>
+
+  <!-- MODAL: BibTeX Citation -->
+  <div class="modal-overlay" id="citeModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-quote-right"></i> Citation / BibTeX</h3>
+        <button class="modal-close" id="citeModalClose"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="bibtex-code" id="bibtexText"></div>
+      <button class="btn btn-primary" id="copyBibtexBtn" style="width: 100%;">
+        <i class="fas fa-copy"></i> Copy to Clipboard
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: Command Palette (Cmd+K) -->
+  <div class="modal-overlay" id="cmdModal">
+    <div class="modal-card" style="max-width: 540px;">
+      <div class="cmd-input-wrapper">
+        <i class="fas fa-search"></i>
+        <input type="text" id="cmdInput" class="cmd-input" placeholder="Type a section or action (e.g., Research, Contact, Theme)..." autocomplete="off">
+      </div>
+      <ul class="cmd-results" id="cmdResults">
+        <li class="cmd-item" data-action="goto" data-target="#hero">
+          <div class="cmd-item-info"><i class="fas fa-home"></i> <span>Home / Hero Section</span></div>
+          <kbd>Jump</kbd>
+        </li>
+        <li class="cmd-item" data-action="goto" data-target="#about">
+          <div class="cmd-item-info"><i class="fas fa-graduation-cap"></i> <span>Academic Background</span></div>
+          <kbd>Jump</kbd>
+        </li>
+        <li class="cmd-item" data-action="goto" data-target="#teaching">
+          <div class="cmd-item-info"><i class="fas fa-chalkboard-teacher"></i> <span>Teaching & UIU Courses</span></div>
+          <kbd>Jump</kbd>
+        </li>
+        <li class="cmd-item" data-action="goto" data-target="#research">
+          <div class="cmd-item-info"><i class="fas fa-book-open"></i> <span>Research & Publications</span></div>
+          <kbd>Jump</kbd>
+        </li>
+        <li class="cmd-item" data-action="goto" data-target="#projects">
+          <div class="cmd-item-info"><i class="fas fa-drafting-compass"></i> <span>Engineering Projects</span></div>
+          <kbd>Jump</kbd>
+        </li>
+        <li class="cmd-item" data-action="goto" data-target="#contact">
+          <div class="cmd-item-info"><i class="fas fa-paper-plane"></i> <span>Contact Information</span></div>
+          <kbd>Jump</kbd>
+        </li>
+        <li class="cmd-item" data-action="theme">
+          <div class="cmd-item-info"><i class="fas fa-adjust"></i> <span>Toggle Dark / Light Theme</span></div>
+          <kbd>Action</kbd>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Custom JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
