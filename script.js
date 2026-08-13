@@ -18,6 +18,24 @@ document.addEventListener('DOMContentLoaded', () => {
   initializeContactForm();
 });
 
+const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+function safeStorageGet(key) {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeStorageSet(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    // Theme selection still applies for the current page when storage is blocked.
+  }
+}
+
 /* --------------------------------------------------------------------------
    1. THEME SWITCHER & PERSISTENCE
    -------------------------------------------------------------------------- */
@@ -27,7 +45,7 @@ function initializeTheme() {
   const htmlElem = document.documentElement;
 
   // Retrieve saved preference or default to system preference
-  const savedTheme = localStorage.getItem('sharan_theme');
+  const savedTheme = safeStorageGet('sharan_theme');
   const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const currentTheme = savedTheme || (systemDark ? 'dark' : 'light');
 
@@ -40,7 +58,7 @@ function initializeTheme() {
 
   function applyTheme(theme) {
     htmlElem.setAttribute('data-theme', theme);
-    localStorage.setItem('sharan_theme', theme);
+    safeStorageSet('sharan_theme', theme);
     if (themeIcon) {
       themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
     }
@@ -60,6 +78,8 @@ function initializeCADBlueprintBackground() {
 
   const ctx = canvas.getContext('2d');
   let width, height, dpr;
+  let animationFrameId = null;
+  let isHeroVisible = true;
 
   // CAD Mouse Tracking State (Lerped for ultra-smooth movement)
   let targetMouse = { x: -1000, y: -1000, active: false };
@@ -74,11 +94,12 @@ function initializeCADBlueprintBackground() {
     height = canvas.offsetHeight;
     canvas.width = width * dpr;
     canvas.height = height * dpr;
-    ctx.scale(dpr, dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     createStructuralNodes();
+    requestDraw();
   }
 
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', resize, { passive: true });
 
   // Track mouse over hero section
   if (heroSection) {
@@ -117,6 +138,7 @@ function initializeCADBlueprintBackground() {
   }
 
   function draw() {
+    animationFrameId = null;
     ctx.clearRect(0, 0, width, height);
 
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -269,11 +291,52 @@ function initializeCADBlueprintBackground() {
       ctx.restore();
     }
 
-    requestAnimationFrame(draw);
+    if (shouldAnimate()) requestDraw();
   }
 
+  function shouldAnimate() {
+    return !reducedMotionQuery.matches && isHeroVisible && !document.hidden;
+  }
+
+  function requestDraw() {
+    if (animationFrameId !== null) return;
+
+    if (shouldAnimate()) {
+      animationFrameId = requestAnimationFrame(draw);
+    } else if (!document.hidden) {
+      // Keep one fully rendered frame for reduced-motion and offscreen states.
+      animationFrameId = requestAnimationFrame(() => {
+        animationFrameId = null;
+        draw();
+      });
+    }
+  }
+
+  if ('IntersectionObserver' in window) {
+    const heroObserver = new IntersectionObserver(([entry]) => {
+      isHeroVisible = entry.isIntersecting;
+      if (isHeroVisible) requestDraw();
+    });
+    heroObserver.observe(heroSection || canvas);
+  } else {
+    // Without visibility observation, preserve the normal animation and still
+    // rely on document visibility and reduced-motion preferences.
+    isHeroVisible = true;
+    requestDraw();
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && animationFrameId !== null) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    } else {
+      requestDraw();
+    }
+  });
+
+  reducedMotionQuery.addEventListener?.('change', requestDraw);
+
   resize();
-  draw();
 }
 
 /* --------------------------------------------------------------------------
@@ -287,7 +350,10 @@ function initializeNav() {
   const navLinks = document.querySelectorAll('.nav-link');
   const sections = document.querySelectorAll('section[id]');
 
-  window.addEventListener('scroll', () => {
+  let scrollFrameId = null;
+
+  function updateNavigation() {
+    scrollFrameId = null;
     const scrollY = window.scrollY;
 
     // Scroll Progress Bar
@@ -317,7 +383,17 @@ function initializeNav() {
         link.classList.add('active');
       }
     });
-  });
+  }
+
+  function scheduleNavigationUpdate() {
+    if (scrollFrameId === null) {
+      scrollFrameId = requestAnimationFrame(updateNavigation);
+    }
+  }
+
+  window.addEventListener('scroll', scheduleNavigationUpdate, { passive: true });
+  window.addEventListener('resize', scheduleNavigationUpdate, { passive: true });
+  updateNavigation();
 
   // Mobile Menu Toggle
   navToggle?.addEventListener('click', (e) => {
@@ -364,6 +440,11 @@ function initializeCarousels() {
 
     let autoPlayTimer = null;
     let isMouseOver = false;
+    let hasFocus = false;
+
+    container.setAttribute('role', 'region');
+    container.setAttribute('aria-roledescription', 'carousel');
+    container.setAttribute('aria-label', id === 'pub-carousel' ? 'Publications' : 'Projects');
 
     function getVisibleCards() {
       return Array.from(container.querySelectorAll('.pub-card, .project-card')).filter(card => {
@@ -407,7 +488,7 @@ function initializeCarousels() {
               if (targetCard) {
                 container.scrollTo({
                   left: targetCard.offsetLeft - container.offsetLeft,
-                  behavior: 'smooth'
+                  behavior: reducedMotionQuery.matches ? 'auto' : 'smooth'
                 });
               }
             });
@@ -426,42 +507,54 @@ function initializeCarousels() {
       const visibleCards = getVisibleCards();
       if (!visibleCards.length) return;
       const scrollStep = container.clientWidth * 0.75;
-      container.scrollBy({ left: -scrollStep, behavior: 'smooth' });
+      container.scrollBy({ left: -scrollStep, behavior: reducedMotionQuery.matches ? 'auto' : 'smooth' });
     });
 
     nextBtn?.addEventListener('click', () => {
       const visibleCards = getVisibleCards();
       if (!visibleCards.length) return;
       const scrollStep = container.clientWidth * 0.75;
-      container.scrollBy({ left: scrollStep, behavior: 'smooth' });
+      container.scrollBy({ left: scrollStep, behavior: reducedMotionQuery.matches ? 'auto' : 'smooth' });
     });
 
-    // Touch & Mouse Drag scrolling
+    // Mouse drag scrolling via Pointer Events; touch retains native scrolling.
     let isDragging = false;
     let startX = 0;
     let startScrollLeft = 0;
+    let dragPointerId = null;
 
-    container.addEventListener('mousedown', (e) => {
+    container.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0 || e.target.closest('a, button')) return;
       isDragging = true;
+      dragPointerId = e.pointerId;
+      container.setPointerCapture?.(e.pointerId);
       container.classList.add('grabbing');
       startX = e.pageX - container.offsetLeft;
       startScrollLeft = container.scrollLeft;
     });
 
-    window.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
+    container.addEventListener('pointermove', (e) => {
+      if (!isDragging || e.pointerId !== dragPointerId) return;
       e.preventDefault();
       const x = e.pageX - container.offsetLeft;
       const walk = (x - startX) * 1.5;
       container.scrollLeft = startScrollLeft - walk;
     });
 
-    window.addEventListener('mouseup', () => {
+    function stopDragging(e) {
+      if (e && dragPointerId !== null && e.pointerId !== dragPointerId) return;
       if (isDragging) {
         isDragging = false;
+        if (dragPointerId !== null && container.hasPointerCapture?.(dragPointerId)) {
+          container.releasePointerCapture(dragPointerId);
+        }
+        dragPointerId = null;
         container.classList.remove('grabbing');
       }
-    });
+    }
+
+    container.addEventListener('pointerup', stopDragging);
+    container.addEventListener('pointercancel', stopDragging);
 
     // Scroll listener with throttle update
     let scrollTimeout;
@@ -473,8 +566,9 @@ function initializeCarousels() {
     // Auto Play timer (pauses on hover & touch)
     function startAutoPlay() {
       stopAutoPlay();
+      if (reducedMotionQuery.matches || document.hidden) return;
       autoPlayTimer = setInterval(() => {
-        if (isMouseOver || isDragging) return;
+        if (isMouseOver || hasFocus || isDragging || document.hidden) return;
         const maxScroll = container.scrollWidth - container.clientWidth;
         if (container.scrollLeft >= maxScroll - 15) {
           container.scrollTo({ left: 0, behavior: 'smooth' });
@@ -486,13 +580,26 @@ function initializeCarousels() {
     }
 
     function stopAutoPlay() {
-      if (autoPlayTimer) clearInterval(autoPlayTimer);
+      if (autoPlayTimer) {
+        clearInterval(autoPlayTimer);
+        autoPlayTimer = null;
+      }
     }
 
     container.addEventListener('mouseenter', () => { isMouseOver = true; });
     container.addEventListener('mouseleave', () => { isMouseOver = false; });
     container.addEventListener('touchstart', () => { isMouseOver = true; }, { passive: true });
     container.addEventListener('touchend', () => { isMouseOver = false; }, { passive: true });
+    container.addEventListener('focusin', () => { hasFocus = true; });
+    container.addEventListener('focusout', (e) => {
+      if (!container.contains(e.relatedTarget)) hasFocus = false;
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopAutoPlay();
+      else startAutoPlay();
+    });
+    reducedMotionQuery.addEventListener?.('change', startAutoPlay);
 
     startAutoPlay();
 
@@ -515,22 +622,24 @@ function initializeFilters() {
   const filterBtns = document.querySelectorAll('.filter-btn');
   const pubCards = document.querySelectorAll('.pub-card');
 
+  filterBtns.forEach(button => {
+    button.setAttribute('aria-pressed', String(button.classList.contains('active')));
+  });
+
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
+      filterBtns.forEach(b => b.setAttribute('aria-pressed', 'false'));
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
 
       const filter = btn.getAttribute('data-filter');
 
       pubCards.forEach(card => {
         const category = card.getAttribute('data-category');
-        if (filter === 'all' || category === filter) {
-          card.style.display = 'flex';
-          card.style.opacity = '1';
-        } else {
-          card.style.display = 'none';
-          card.style.opacity = '0';
-        }
+        const isFilteredOut = filter !== 'all' && category !== filter;
+        card.classList.toggle('is-filtered-out', isFilteredOut);
+        card.setAttribute('aria-hidden', String(isFilteredOut));
       });
 
       // Reset publication carousel scroll position & update dots
@@ -544,17 +653,105 @@ function initializeFilters() {
 /* --------------------------------------------------------------------------
    5. BIBTEX CITATION MODAL & TOAST NOTIFICATION
    -------------------------------------------------------------------------- */
+let activeModalController = null;
+
+function createModalController({ modal, closeButtons = [], initialFocus = null, onClose = null }) {
+  if (!modal) return { open: () => {}, close: () => {} };
+
+  let previousFocus = null;
+  const pageRegions = ['header', 'main', 'footer']
+    .map(selector => document.querySelector(selector))
+    .filter(Boolean);
+
+  function getFocusableElements() {
+    return Array.from(modal.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter(element => (
+      !element.hidden
+      && element.getAttribute('aria-hidden') !== 'true'
+      && element.getClientRects().length > 0
+    ));
+  }
+
+  function open(trigger = document.activeElement) {
+    if (activeModalController && activeModalController !== controller) {
+      activeModalController.close();
+      trigger = document.activeElement;
+    }
+
+    previousFocus = trigger instanceof HTMLElement ? trigger : null;
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+    pageRegions.forEach(region => region.setAttribute('inert', ''));
+    activeModalController = controller;
+
+    const focusTarget = typeof initialFocus === 'function' ? initialFocus() : initialFocus;
+    requestAnimationFrame(() => (focusTarget || getFocusableElements()[0])?.focus());
+  }
+
+  function close() {
+    if (!modal.classList.contains('active')) return;
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    pageRegions.forEach(region => region.removeAttribute('inert'));
+    if (activeModalController === controller) activeModalController = null;
+    onClose?.();
+    previousFocus?.focus();
+    previousFocus = null;
+  }
+
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) close();
+  });
+
+  modal.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      close();
+      return;
+    }
+
+    if (event.key !== 'Tab') return;
+    const focusable = getFocusableElements();
+    if (!focusable.length) {
+      event.preventDefault();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
+  const controller = { open, close };
+  closeButtons.forEach(button => button?.addEventListener('click', close));
+  return controller;
+}
+
 function showToast(message) {
   let container = document.querySelector('.toast-container');
   if (!container) {
     container = document.createElement('div');
     container.className = 'toast-container';
+    container.setAttribute('role', 'status');
+    container.setAttribute('aria-live', 'polite');
     document.body.appendChild(container);
   }
 
   const toast = document.createElement('div');
   toast.className = 'toast';
-  toast.innerHTML = `<i class="fas fa-check-circle"></i> <span>${message}</span>`;
+  const icon = document.createElement('i');
+  icon.className = 'fas fa-check-circle';
+  icon.setAttribute('aria-hidden', 'true');
+  const text = document.createElement('span');
+  text.textContent = message;
+  toast.append(icon, document.createTextNode(' '), text);
   container.appendChild(toast);
 
   setTimeout(() => {
@@ -565,46 +762,64 @@ function showToast(message) {
   }, 2500);
 }
 
+async function copyText(text) {
+  if (navigator.clipboard?.writeText && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.setAttribute('readonly', '');
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  let copied = false;
+  try {
+    copied = document.execCommand('copy');
+  } finally {
+    textarea.remove();
+  }
+  if (!copied) throw new Error('Copy command was not accepted');
+}
+
 function initializeCitationModal() {
   const citeModal = document.getElementById('citeModal');
   const citeModalClose = document.getElementById('citeModalClose');
   const bibtexText = document.getElementById('bibtexText');
   const copyBibtexBtn = document.getElementById('copyBibtexBtn');
   const citeBtns = document.querySelectorAll('.cite-btn');
+  const modalController = createModalController({
+    modal: citeModal,
+    closeButtons: [citeModalClose],
+    initialFocus: citeModalClose
+  });
 
   citeBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       const bibtex = btn.getAttribute('data-bibtex');
       if (bibtexText) bibtexText.textContent = bibtex;
-      citeModal?.classList.add('active');
+      modalController.open(btn);
     });
   });
 
-  citeModalClose?.addEventListener('click', () => {
-    citeModal?.classList.remove('active');
-  });
+  const copyButtonDefaultHtml = copyBibtexBtn?.innerHTML;
+  let copyResetTimer = null;
 
-  citeModal?.addEventListener('click', (e) => {
-    if (e.target === citeModal) citeModal.classList.remove('active');
-  });
-
-  // Escape key listener
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && citeModal?.classList.contains('active')) {
-      citeModal.classList.remove('active');
-    }
-  });
-
-  copyBibtexBtn?.addEventListener('click', () => {
+  copyBibtexBtn?.addEventListener('click', async () => {
     if (bibtexText) {
-      navigator.clipboard.writeText(bibtexText.textContent).then(() => {
-        const originalText = copyBibtexBtn.innerHTML;
+      try {
+        await copyText(bibtexText.textContent);
         copyBibtexBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
         showToast('BibTeX citation copied to clipboard!');
-        setTimeout(() => {
-          copyBibtexBtn.innerHTML = originalText;
+        clearTimeout(copyResetTimer);
+        copyResetTimer = setTimeout(() => {
+          copyBibtexBtn.innerHTML = copyButtonDefaultHtml;
         }, 2000);
-      });
+      } catch {
+        showToast('Could not copy automatically. Select the citation and copy it manually.');
+      }
     }
   });
 }
@@ -619,21 +834,29 @@ function initializeCommandPalette() {
   const cmdItems = Array.from(document.querySelectorAll('.cmd-item'));
   let selectedIndex = -1;
 
-  function openCmd() {
-    cmdModal?.classList.add('active');
-    cmdInput?.focus();
-    selectedIndex = 0;
-    updateSelection();
-  }
-
-  function closeCmd() {
-    cmdModal?.classList.remove('active');
+  function resetCmd() {
     if (cmdInput) cmdInput.value = '';
     selectedIndex = -1;
     filterResults('');
   }
 
-  cmdToggleBtn?.addEventListener('click', openCmd);
+  const modalController = createModalController({
+    modal: cmdModal,
+    initialFocus: () => cmdInput,
+    onClose: resetCmd
+  });
+
+  function openCmd(trigger = document.activeElement) {
+    selectedIndex = 0;
+    updateSelection();
+    modalController.open(trigger);
+  }
+
+  function closeCmd() {
+    modalController.close();
+  }
+
+  cmdToggleBtn?.addEventListener('click', () => openCmd(cmdToggleBtn));
 
   function getVisibleItems() {
     return cmdItems.filter(item => item.style.display !== 'none');
@@ -688,10 +911,6 @@ function initializeCommandPalette() {
     }
   });
 
-  cmdModal?.addEventListener('click', (e) => {
-    if (e.target === cmdModal) closeCmd();
-  });
-
   cmdInput?.addEventListener('input', (e) => {
     filterResults(e.target.value.toLowerCase().trim());
   });
@@ -719,7 +938,7 @@ function initializeCommandPalette() {
       if (action === 'goto' && target) {
         const targetElem = document.querySelector(target);
         if (targetElem) {
-          targetElem.scrollIntoView({ behavior: 'smooth' });
+          targetElem.scrollIntoView({ behavior: reducedMotionQuery.matches ? 'auto' : 'smooth' });
         }
       } else if (action === 'theme') {
         document.getElementById('themeToggleBtn')?.click();
@@ -733,6 +952,14 @@ function initializeCommandPalette() {
    -------------------------------------------------------------------------- */
 function initializeScrollAnimations() {
   const animatedElements = document.querySelectorAll('.pub-card, .teaching-card, .project-card, .skill-category, .timeline-card');
+
+  if (reducedMotionQuery.matches || !('IntersectionObserver' in window)) {
+    animatedElements.forEach(el => {
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    });
+    return;
+  }
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -774,4 +1001,3 @@ function initializeContactForm() {
     window.location.href = mailtoUrl;
   });
 }
-

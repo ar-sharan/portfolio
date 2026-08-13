@@ -117,6 +117,11 @@ body {
   transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
+/* Reusable alternate section surface. */
+.section--surface-soft {
+  background: var(--bg-surface-soft);
+}
+
 /* Scroll Progress Bar */
 .scroll-progress {
   position: fixed;
@@ -550,90 +555,6 @@ button {
   color: var(--accent-cyan);
   background: var(--accent-soft);
   transform: translateY(-3px);
-}
-
-.hero-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  padding-top: 0.5rem;
-}
-
-.stat-item {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 0.75rem 0.85rem;
-  border-radius: 12px;
-  background: var(--bg-surface-raised, rgba(255, 255, 255, 0.03));
-  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-  cursor: default;
-}
-
-.stat-item:hover {
-  transform: translateY(-3px);
-  border-color: var(--accent-cyan);
-  box-shadow: var(--shadow-md, 0 4px 14px rgba(0, 0, 0, 0.1));
-}
-
-.stat-number {
-  font-family: var(--font-serif);
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: var(--accent-cyan);
-  line-height: 1;
-  margin-bottom: 0.3rem;
-}
-
-.stat-label {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-.stat-tooltip {
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  background: var(--bg-surface-raised, #1e293b);
-  color: var(--text-main, #f8fafc);
-  font-size: 0.75rem;
-  font-weight: 500;
-  padding: 0.4rem 0.75rem;
-  border-radius: 8px;
-  white-space: nowrap;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--accent-cyan);
-  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
-  z-index: 30;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.stat-tooltip i {
-  color: var(--accent-cyan);
-}
-
-.stat-tooltip::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 5px;
-  border-style: solid;
-  border-color: var(--bg-surface-raised, #1e293b) transparent transparent transparent;
-}
-
-.stat-item:hover .stat-tooltip {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(0);
 }
 
 /* Rounded Square Portrait Frame (24px Rounded Corners) */
@@ -1141,7 +1062,6 @@ button {
   min-width: 310px;
   scroll-snap-align: start;
   scroll-snap-stop: always;
-  display: flex !important;
   flex-direction: column !important;
   justify-content: space-between !important;
   grid-template-columns: none !important;
@@ -1159,20 +1079,48 @@ button {
 }
 
 .carousel-dot {
-  width: 10px;
-  height: 10px;
+  position: relative;
+  width: 42px;
+  height: 42px;
+  margin: -16px;
   border-radius: 50%;
-  background: var(--border-color);
+  background: transparent;
   border: none;
   cursor: pointer;
   transition: all var(--transition-fast);
   padding: 0;
 }
 
+.carousel-dot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 26px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--border-color);
+  transition: all var(--transition-fast);
+}
+
 .carousel-dot.active {
+  margin-inline: -8px;
+}
+
+.carousel-dot.active::before {
   width: 26px;
   border-radius: var(--radius-pill);
   background: var(--accent-cyan);
+}
+
+.carousel-dot:not(.active)::before {
+  width: 10px;
+}
+
+.carousel-dot:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 @media (max-width: 992px) {
@@ -1208,6 +1156,10 @@ button {
   flex-direction: column;
   justify-content: space-between;
   gap: 1.5rem;
+}
+
+.pub-card.is-filtered-out {
+  display: none !important;
 }
 
 .pub-card:hover {
@@ -1650,7 +1602,17 @@ textarea.form-control {
   gap: 0.4rem;
 }
 
+.cmd-results > li {
+  display: contents;
+}
+
 .cmd-item {
+  width: 100%;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: left;
   padding: 0.75rem 1rem;
   border-radius: var(--radius-md);
   display: flex;
@@ -1781,12 +1743,6 @@ textarea.form-control {
 @media (max-width: 576px) {
   .hero-name {
     font-size: clamp(2.4rem, 9vw, 3.2rem);
-  }
-
-  .hero-stats {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    text-align: center;
   }
 
   .hero-cta {
@@ -1941,14 +1897,6 @@ textarea.form-control {
   color: var(--accent-cyan);
 }
 
-.pipeline-intro {
-  font-size: 0.95rem;
-  color: var(--text-muted);
-  max-width: 800px;
-  margin-bottom: 1.75rem;
-  line-height: 1.6;
-}
-
 .pipeline-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -1993,46 +1941,6 @@ textarea.form-control {
   font-size: 0.88rem;
   color: var(--text-muted);
   line-height: 1.55;
-}
-
-/* --------------------------------------------------------------------------
-   TEACHING PHILOSOPHY & PEDAGOGICAL APPROACH CARD
-   -------------------------------------------------------------------------- */
-.teaching-philosophy-card {
-  display: flex;
-  gap: 1.25rem;
-  background: var(--accent-soft);
-  border-left: 4px solid var(--accent-cyan);
-  border-radius: var(--radius-md);
-  padding: 1.75rem 2rem;
-  margin-bottom: 2.5rem;
-}
-
-[data-theme="dark"] .teaching-philosophy-card {
-  background: rgba(12, 74, 110, 0.3);
-}
-
-.teaching-philosophy-card .quote-icon {
-  font-size: 2rem;
-  color: var(--accent-cyan);
-  opacity: 0.7;
-  flex-shrink: 0;
-}
-
-.philosophy-text h4 {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--text-main);
-  margin-bottom: 0.5rem;
-}
-
-.philosophy-text p {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 1rem;
-  line-height: 1.65;
-  color: var(--text-muted);
 }
 
 /* --------------------------------------------------------------------------
@@ -2087,4 +1995,15 @@ textarea.form-control {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
