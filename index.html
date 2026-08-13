@@ -202,9 +202,6 @@
           <h3 class="pipeline-title">
             <i class="fas fa-microscope" aria-hidden="true"></i> Scholarly Vision & Data Analytics Architecture
           </h3>
-          <p class="pipeline-intro">
-            Integrating spatial GIS modeling, empirical statistical regression, and machine learning to address transportation safety, land-use interactions, and geotechnical soft-soil mechanics.
-          </p>
           <div class="pipeline-grid">
             <div class="pipeline-step">
               <div class="step-number">01</div>
@@ -358,13 +355,21 @@
           </div>
         </div>
 
-        <div class="filter-bar">
-          <button class="filter-btn active" data-filter="all">All Publications</button>
-          <button class="filter-btn" data-filter="journal">Journal Articles</button>
-          <button class="filter-btn" data-filter="conference">Conference Papers</button>
-        </div>
+        <div class="carousel-wrapper" id="pub-carousel-wrapper">
+          <div class="carousel-header-controls">
+            <div class="filter-bar">
+              <button class="filter-btn active" data-filter="all">All Publications</button>
+              <button class="filter-btn" data-filter="journal">Journal Articles</button>
+              <button class="filter-btn" data-filter="conference">Conference Papers</button>
+            </div>
+            <div class="carousel-nav-btns">
+              <button class="carousel-btn prev-btn" aria-label="Previous Publication" data-target="pub-carousel"><i class="fas fa-chevron-left"></i></button>
+              <button class="carousel-btn next-btn" aria-label="Next Publication" data-target="pub-carousel"><i class="fas fa-chevron-right"></i></button>
+            </div>
+          </div>
 
-        <div class="pub-list">
+          <div class="carousel-container" id="pub-carousel">
+            <div class="pub-list carousel-track">
 
           <!-- Pub 1 -->
           <div class="pub-card" data-category="journal">
@@ -526,6 +531,9 @@
             </div>
           </div>
 
+            </div>
+          </div>
+          <div class="carousel-dots" id="pub-carousel-dots"></div>
         </div>
       </div>
     </section>
@@ -539,7 +547,16 @@
           <p class="section-subtitle">Integrated structural, geotechnical, and transportation engineering projects.</p>
         </div>
 
-        <div class="projects-grid">
+        <div class="carousel-wrapper" id="projects-carousel-wrapper">
+          <div class="carousel-header-controls right-aligned">
+            <div class="carousel-nav-btns">
+              <button class="carousel-btn prev-btn" aria-label="Previous Project" data-target="projects-carousel"><i class="fas fa-chevron-left"></i></button>
+              <button class="carousel-btn next-btn" aria-label="Next Project" data-target="projects-carousel"><i class="fas fa-chevron-right"></i></button>
+            </div>
+          </div>
+
+          <div class="carousel-container" id="projects-carousel">
+            <div class="projects-grid carousel-track">
 
           <!-- FYDP Project -->
           <div class="project-card">

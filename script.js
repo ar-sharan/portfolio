@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initializeTheme();
   initializeCADBlueprintBackground();
   initializeNav();
+  initializeCarousels();
   initializeFilters();
   initializeCitationModal();
   initializeCommandPalette();
@@ -345,8 +346,171 @@ function initializeNav() {
 }
 
 /* --------------------------------------------------------------------------
-   4. PUBLICATION CATEGORY FILTERING
+   4. HORIZONTAL CAROUSEL ENGINE & PUBLICATION FILTERING
    -------------------------------------------------------------------------- */
+const carouselInstances = {};
+
+function initializeCarousels() {
+  const containers = document.querySelectorAll('.carousel-container');
+
+  containers.forEach(container => {
+    const id = container.id;
+    if (!id) return;
+
+    const wrapper = container.closest('.carousel-wrapper');
+    const dotsContainer = wrapper ? wrapper.querySelector('.carousel-dots') : null;
+    const prevBtn = document.querySelector(`.carousel-btn.prev-btn[data-target="${id}"]`);
+    const nextBtn = document.querySelector(`.carousel-btn.next-btn[data-target="${id}"]`);
+
+    let autoPlayTimer = null;
+    let isMouseOver = false;
+
+    function getVisibleCards() {
+      return Array.from(container.querySelectorAll('.pub-card, .project-card')).filter(card => {
+        return window.getComputedStyle(card).display !== 'none';
+      });
+    }
+
+    function updateControls() {
+      const visibleCards = getVisibleCards();
+      if (!visibleCards.length) return;
+
+      const scrollLeft = container.scrollLeft;
+      const maxScroll = container.scrollWidth - container.clientWidth;
+
+      // Update Prev / Next button disabled states
+      if (prevBtn) prevBtn.disabled = scrollLeft <= 10;
+      if (nextBtn) nextBtn.disabled = scrollLeft >= maxScroll - 10;
+
+      // Calculate active card index
+      let activeIndex = 0;
+      let minDistance = Infinity;
+      visibleCards.forEach((card, index) => {
+        const cardOffset = card.offsetLeft - container.offsetLeft;
+        const distance = Math.abs(cardOffset - scrollLeft);
+        if (distance < minDistance) {
+          minDistance = distance;
+          activeIndex = index;
+        }
+      });
+
+      // Render or update navigation dots
+      if (dotsContainer) {
+        if (dotsContainer.children.length !== visibleCards.length) {
+          dotsContainer.innerHTML = '';
+          visibleCards.forEach((_, idx) => {
+            const dot = document.createElement('button');
+            dot.className = `carousel-dot ${idx === activeIndex ? 'active' : ''}`;
+            dot.setAttribute('aria-label', `Go to slide ${idx + 1}`);
+            dot.addEventListener('click', () => {
+              const targetCard = visibleCards[idx];
+              if (targetCard) {
+                container.scrollTo({
+                  left: targetCard.offsetLeft - container.offsetLeft,
+                  behavior: 'smooth'
+                });
+              }
+            });
+            dotsContainer.appendChild(dot);
+          });
+        } else {
+          Array.from(dotsContainer.children).forEach((dot, idx) => {
+            dot.classList.toggle('active', idx === activeIndex);
+          });
+        }
+      }
+    }
+
+    // Prev / Next button click events
+    prevBtn?.addEventListener('click', () => {
+      const visibleCards = getVisibleCards();
+      if (!visibleCards.length) return;
+      const scrollStep = container.clientWidth * 0.75;
+      container.scrollBy({ left: -scrollStep, behavior: 'smooth' });
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      const visibleCards = getVisibleCards();
+      if (!visibleCards.length) return;
+      const scrollStep = container.clientWidth * 0.75;
+      container.scrollBy({ left: scrollStep, behavior: 'smooth' });
+    });
+
+    // Touch & Mouse Drag scrolling
+    let isDragging = false;
+    let startX = 0;
+    let startScrollLeft = 0;
+
+    container.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      container.classList.add('grabbing');
+      startX = e.pageX - container.offsetLeft;
+      startScrollLeft = container.scrollLeft;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - container.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      container.scrollLeft = startScrollLeft - walk;
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        container.classList.remove('grabbing');
+      }
+    });
+
+    // Scroll listener with throttle update
+    let scrollTimeout;
+    container.addEventListener('scroll', () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(updateControls, 40);
+    });
+
+    // Auto Play timer (pauses on hover & touch)
+    function startAutoPlay() {
+      stopAutoPlay();
+      autoPlayTimer = setInterval(() => {
+        if (isMouseOver || isDragging) return;
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        if (container.scrollLeft >= maxScroll - 15) {
+          container.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          const scrollStep = container.clientWidth * 0.75;
+          container.scrollBy({ left: scrollStep, behavior: 'smooth' });
+        }
+      }, 6000);
+    }
+
+    function stopAutoPlay() {
+      if (autoPlayTimer) clearInterval(autoPlayTimer);
+    }
+
+    container.addEventListener('mouseenter', () => { isMouseOver = true; });
+    container.addEventListener('mouseleave', () => { isMouseOver = false; });
+    container.addEventListener('touchstart', () => { isMouseOver = true; }, { passive: true });
+    container.addEventListener('touchend', () => { isMouseOver = false; }, { passive: true });
+
+    startAutoPlay();
+
+    // Store instance reference for filter updates
+    carouselInstances[id] = {
+      container,
+      update: () => {
+        container.scrollTo({ left: 0, behavior: 'auto' });
+        if (dotsContainer) dotsContainer.innerHTML = '';
+        setTimeout(updateControls, 50);
+      }
+    };
+
+    // Initial calculation
+    updateControls();
+  });
+}
+
 function initializeFilters() {
   const filterBtns = document.querySelectorAll('.filter-btn');
   const pubCards = document.querySelectorAll('.pub-card');
@@ -361,13 +525,18 @@ function initializeFilters() {
       pubCards.forEach(card => {
         const category = card.getAttribute('data-category');
         if (filter === 'all' || category === filter) {
-          card.style.display = 'grid';
+          card.style.display = 'flex';
           card.style.opacity = '1';
         } else {
           card.style.display = 'none';
           card.style.opacity = '0';
         }
       });
+
+      // Reset publication carousel scroll position & update dots
+      if (carouselInstances['pub-carousel']) {
+        carouselInstances['pub-carousel'].update();
+      }
     });
   });
 }
