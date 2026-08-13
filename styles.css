@@ -1661,15 +1661,43 @@ textarea.form-control {
 @media (max-width: 992px) {
   .hero-grid {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 2.5rem;
+  }
+
+  .hero-visual {
+    order: -1;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-badge-group {
+    justify-content: center;
+  }
+
+  .hero-title-role {
+    justify-content: center;
+  }
+
+  .hero-bio {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-cta {
+    justify-content: center;
   }
 
   .profile-frame {
-    max-width: 340px;
+    max-width: 280px;
   }
 
   .profile-img {
-    height: 420px;
+    height: 320px;
   }
 
   .academic-grid {
@@ -1741,6 +1769,14 @@ textarea.form-control {
 }
 
 @media (max-width: 576px) {
+  .profile-frame {
+    max-width: 240px;
+  }
+
+  .profile-img {
+    height: 280px;
+  }
+
   .hero-name {
     font-size: clamp(2.4rem, 9vw, 3.2rem);
   }
