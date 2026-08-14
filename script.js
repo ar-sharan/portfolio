@@ -70,6 +70,7 @@ function initializeTheme() {
 
 /* --------------------------------------------------------------------------
    2. CIVIL ENGINEERING STRUCTURAL BLUEPRINT & CAD GRID CANVAS
+      (With Elastic Fluid Wave Physics & Mobile Motion Sensor)
    -------------------------------------------------------------------------- */
 function initializeCADBlueprintBackground() {
   const canvas = document.getElementById('its-canvas');
@@ -77,23 +78,64 @@ function initializeCADBlueprintBackground() {
   if (!canvas) return;
 
   const ctx = canvas.getContext('2d');
-  let width, height, dpr;
+  let width = 0, height = 0, dpr = 1;
   let animationFrameId = null;
   let isHeroVisible = true;
+  let lastTimestamp = performance.now();
+  let globalTime = 0;
 
-  // CAD Mouse Tracking State (Lerped for ultra-smooth movement)
-  let targetMouse = { x: -1000, y: -1000, active: false };
-  let currentMouse = { x: -1000, y: -1000 };
+  // CAD Pointer Tracking State (Lerped for ultra-smooth movement)
+  const targetPointer = { x: -1000, y: -1000, active: false, speed: 0 };
+  const currentPointer = { x: -1000, y: -1000 };
+  let lastPointerPos = { x: -1000, y: -1000, time: performance.now() };
+
+  // Mobile Device Orientation (Gyroscope / Tilt) State
+  const tilt = {
+    x: 0,
+    y: 0,
+    targetX: 0,
+    targetY: 0,
+    rawGamma: 0,
+    rawBeta: 0,
+    hasSensor: false
+  };
+
+  // Fluid Wave Ripple System
+  const ripples = [];
+  const MAX_RIPPLES = 12;
 
   // Structural Member Nodes (Simulating structural truss & coordinate grid)
   let structuralNodes = [];
 
+  function addRipple(x, y, intensity = 0.5, speedMultiplier = 1.0, maxRadius = null) {
+    if (x < -100 || y < -100 || x > width + 100 || y > height + 100) return;
+    
+    if (ripples.length >= MAX_RIPPLES) {
+      ripples.shift(); // Remove oldest to maintain strict 60/120fps performance
+    }
+
+    const calculatedMaxRadius = maxRadius || Math.min(width, height) * 0.48;
+
+    ripples.push({
+      x,
+      y,
+      radius: 4,
+      maxRadius: calculatedMaxRadius,
+      speed: (2.8 + Math.min(intensity * 3.5, 5.0)) * speedMultiplier,
+      intensity: Math.min(1.0, Math.max(0.15, intensity)),
+      life: 1.0,
+      decay: 0.016 + Math.random() * 0.006
+    });
+
+    requestDraw();
+  }
+
   function resize() {
-    dpr = window.devicePixelRatio || 1;
-    width = canvas.offsetWidth;
-    height = canvas.offsetHeight;
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
+    dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2 for performance
+    width = canvas.offsetWidth || window.innerWidth;
+    height = canvas.offsetHeight || window.innerHeight;
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     createStructuralNodes();
     requestDraw();
@@ -101,102 +143,363 @@ function initializeCADBlueprintBackground() {
 
   window.addEventListener('resize', resize, { passive: true });
 
-  // Track mouse over hero section
-  if (heroSection) {
-    heroSection.addEventListener('mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      targetMouse.x = e.clientX - rect.left;
-      targetMouse.y = e.clientY - rect.top;
-      targetMouse.active = true;
-    });
+  // --------------------------------------------------------------------------
+  // POINTER & MOUSE INTERACTION (DESKTOP)
+  // --------------------------------------------------------------------------
+  function handlePointerMove(e) {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.clientX - rect.left;
+    const clientY = e.clientY - rect.top;
 
-    heroSection.addEventListener('mouseleave', () => {
-      targetMouse.active = false;
-    });
+    const now = performance.now();
+    const dt = Math.max(16, now - lastPointerPos.time);
+    const dx = clientX - lastPointerPos.x;
+    const dy = clientY - lastPointerPos.y;
+    const dist = Math.hypot(dx, dy);
+    const speed = dist / (dt / 16.67); // px per frame
+
+    targetPointer.x = clientX;
+    targetPointer.y = clientY;
+    targetPointer.active = true;
+    targetPointer.speed = speed;
+
+    // Inject fluid wave ripple if pointer moved with sufficient kinetic speed
+    if (dist > 18 && speed > 2.0) {
+      const rippleIntensity = Math.min(0.95, 0.2 + speed * 0.035);
+      addRipple(clientX, clientY, rippleIntensity, 1.1);
+      lastPointerPos = { x: clientX, y: clientY, time: now };
+    } else if (lastPointerPos.x === -1000) {
+      lastPointerPos = { x: clientX, y: clientY, time: now };
+    }
+
+    requestDraw();
   }
 
+  function handlePointerLeave() {
+    targetPointer.active = false;
+    lastPointerPos = { x: -1000, y: -1000, time: performance.now() };
+    requestDraw();
+  }
+
+  if (heroSection) {
+    heroSection.addEventListener('mousemove', handlePointerMove, { passive: true });
+    heroSection.addEventListener('mouseleave', handlePointerLeave, { passive: true });
+
+    // ------------------------------------------------------------------------
+    // TOUCH INTERACTION (MOBILE / TABLET)
+    // ------------------------------------------------------------------------
+    heroSection.addEventListener('touchstart', (e) => {
+      if (!e.touches || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      const tx = touch.clientX - rect.left;
+      const ty = touch.clientY - rect.top;
+
+      targetPointer.x = tx;
+      targetPointer.y = ty;
+      targetPointer.active = true;
+      lastPointerPos = { x: tx, y: ty, time: performance.now() };
+
+      // Tap creates instant fluid ripple
+      addRipple(tx, ty, 0.75, 1.2);
+      requestDraw();
+    }, { passive: true });
+
+    heroSection.addEventListener('touchmove', (e) => {
+      if (!e.touches || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      const tx = touch.clientX - rect.left;
+      const ty = touch.clientY - rect.top;
+
+      const now = performance.now();
+      const dt = Math.max(16, now - lastPointerPos.time);
+      const dx = tx - lastPointerPos.x;
+      const dy = ty - lastPointerPos.y;
+      const dist = Math.hypot(dx, dy);
+      const speed = dist / (dt / 16.67);
+
+      targetPointer.x = tx;
+      targetPointer.y = ty;
+      targetPointer.active = true;
+
+      if (dist > 15 && speed > 1.8) {
+        addRipple(tx, ty, Math.min(0.85, 0.25 + speed * 0.04), 1.05);
+        lastPointerPos = { x: tx, y: ty, time: now };
+      }
+      requestDraw();
+    }, { passive: true });
+
+    heroSection.addEventListener('touchend', () => {
+      // Smooth fadeout of pointer cursor after touch release
+      setTimeout(() => {
+        if (!targetPointer.active) return;
+        targetPointer.active = false;
+        requestDraw();
+      }, 400);
+    }, { passive: true });
+
+    heroSection.addEventListener('touchcancel', () => {
+      targetPointer.active = false;
+    }, { passive: true });
+  }
+
+  // --------------------------------------------------------------------------
+  // MOBILE DEVICE ORIENTATION & MOTION SENSOR (GYRO / TILT)
+  // --------------------------------------------------------------------------
+  function handleDeviceOrientation(e) {
+    if (e.gamma === null || e.beta === null) return;
+    tilt.hasSensor = true;
+
+    // gamma: left-to-right tilt in [-90, 90]
+    // beta: front-to-back tilt in [-180, 180] (natural phone hold is ~45deg)
+    const clampedGamma = Math.max(-45, Math.min(45, e.gamma));
+    const clampedBeta = Math.max(-45, Math.min(45, e.beta - 45));
+
+    // Measure angular acceleration/velocity
+    const dGamma = clampedGamma - tilt.rawGamma;
+    const dBeta = clampedBeta - tilt.rawBeta;
+    const angularSpeed = Math.hypot(dGamma, dBeta);
+
+    // If device was moved/tilted quickly, emit fluid wave disturbance
+    if (angularSpeed > 3.2) {
+      const centerX = width * 0.5 + (clampedGamma / 45) * (width * 0.25);
+      const centerY = height * 0.5 + (clampedBeta / 45) * (height * 0.25);
+      addRipple(centerX, centerY, Math.min(0.7, angularSpeed * 0.045), 0.9);
+    }
+
+    tilt.rawGamma = clampedGamma;
+    tilt.rawBeta = clampedBeta;
+    tilt.targetX = (clampedGamma / 45) * 35; // max 35px parallax shift
+    tilt.targetY = (clampedBeta / 45) * 35;
+
+    requestDraw();
+  }
+
+  if (window.DeviceOrientationEvent) {
+    window.addEventListener('deviceorientation', handleDeviceOrientation, { passive: true });
+  }
+
+  // --------------------------------------------------------------------------
+  // STRUCTURAL NODES INITIALIZATION
+  // --------------------------------------------------------------------------
   function createStructuralNodes() {
     structuralNodes = [];
-    const gridCols = Math.ceil(width / 160);
-    const gridRows = Math.ceil(height / 120);
+    const gridCols = Math.ceil(width / 140) + 1;
+    const gridRows = Math.ceil(height / 110) + 1;
 
     for (let r = 0; r <= gridRows; r++) {
       for (let c = 0; c <= gridCols; c++) {
-        const baseX = c * 160 + (r % 2 === 0 ? 0 : 40);
-        const baseY = r * 120 + 30;
-        
+        const baseX = c * 140 + (r % 2 === 0 ? 0 : 35);
+        const baseY = r * 110 + 20;
+
         structuralNodes.push({
-          x: baseX + (Math.random() - 0.5) * 30,
-          y: baseY + (Math.random() - 0.5) * 20,
+          x: baseX,
+          y: baseY,
           baseX: baseX,
           baseY: baseY,
+          vx: 0,
+          vy: 0,
           pulse: Math.random() * Math.PI * 2,
-          isPinned: r === gridRows || Math.random() > 0.85
+          pulseSpeed: 0.012 + Math.random() * 0.01,
+          isPinned: r === gridRows || Math.random() > 0.88,
+          stress: 0
         });
       }
     }
   }
 
+  // --------------------------------------------------------------------------
+  // FLUID WAVE FIELD DISPLACEMENT CALCULATION
+  // --------------------------------------------------------------------------
+  function getWaveDisplacement(x, y, time) {
+    let dx = 0;
+    let dy = 0;
+    let totalStress = 0;
+
+    // 1. Direct interactive cursor elastic displacement
+    if (targetPointer.active && currentPointer.x >= 0 && currentPointer.y >= 0) {
+      const toMouseX = x - currentPointer.x;
+      const toMouseY = y - currentPointer.y;
+      const mouseDist = Math.hypot(toMouseX, toMouseY);
+      const mouseRadius = 170;
+
+      if (mouseDist < mouseRadius && mouseDist > 0.01) {
+        // Elastic radial push & fluid swirl
+        const factor = Math.pow(1 - mouseDist / mouseRadius, 2);
+        const force = factor * 22;
+        const normX = toMouseX / mouseDist;
+        const normY = toMouseY / mouseDist;
+
+        dx += normX * force;
+        dy += normY * force;
+        totalStress += factor * 0.6;
+      }
+    }
+
+    // 2. Dynamic Wave Ripples (decaying cosine-gaussian wave packets)
+    for (let i = 0; i < ripples.length; i++) {
+      const rip = ripples[i];
+      const rx = x - rip.x;
+      const ry = y - rip.y;
+      const dist = Math.hypot(rx, ry);
+      const delta = dist - rip.radius;
+
+      // Concentric wave packet zone
+      if (Math.abs(delta) < 70 && dist > 0.01) {
+        const normX = rx / dist;
+        const normY = ry / dist;
+        
+        // Gaussian envelope modulated by sinusoidal wavefront
+        const envelope = Math.exp(-Math.pow(delta / 28, 2));
+        const wave = Math.sin(delta * 0.12) * envelope * rip.intensity * rip.life * 18;
+
+        dx += normX * wave;
+        dy += normY * wave;
+        totalStress += Math.abs(wave) * 0.05;
+      }
+    }
+
+    // 3. Subtle ambient seismic fluid swell
+    const ambientWaveX = Math.sin(y * 0.008 + time * 1.4) * Math.cos(x * 0.006 + time * 0.9) * 3.2;
+    const ambientWaveY = Math.cos(x * 0.008 + time * 1.2) * Math.sin(y * 0.006 + time * 1.1) * 2.8;
+
+    dx += ambientWaveX + tilt.x * 0.45;
+    dy += ambientWaveY + tilt.y * 0.45;
+
+    return { dx, dy, stress: Math.min(1.0, totalStress) };
+  }
+
+  // --------------------------------------------------------------------------
+  // MAIN DRAW & RENDER LOOP
+  // --------------------------------------------------------------------------
   function draw() {
     animationFrameId = null;
+
+    const now = performance.now();
+    const delta = Math.min((now - lastTimestamp) / 1000, 0.1);
+    lastTimestamp = now;
+    globalTime += delta;
+
     ctx.clearRect(0, 0, width, height);
 
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
-    // Civil CAD & Blueprint Color Palette
-    const gridMinorColor = isDark ? 'rgba(56, 189, 248, 0.05)' : 'rgba(2, 132, 199, 0.06)';
-    const gridMajorColor = isDark ? 'rgba(56, 189, 248, 0.12)' : 'rgba(2, 132, 199, 0.12)';
-    const axisTickColor = isDark ? 'rgba(56, 189, 248, 0.25)' : 'rgba(2, 132, 199, 0.25)';
-    const trussLineColor = isDark ? 'rgba(45, 212, 191, 0.18)' : 'rgba(13, 148, 136, 0.16)';
-    const nodeColor = isDark ? 'rgba(56, 189, 248, 0.65)' : 'rgba(2, 132, 199, 0.6)';
-    const crosshairColor = isDark ? 'rgba(56, 189, 248, 0.35)' : 'rgba(2, 132, 199, 0.35)';
-    const coordTextColor = isDark ? 'rgba(186, 230, 253, 0.65)' : 'rgba(14, 116, 144, 0.75)';
+    // Civil Engineering CAD Color Tokens
+    const gridMinorColor = isDark ? 'rgba(56, 189, 248, 0.05)' : 'rgba(2, 132, 199, 0.055)';
+    const gridMajorColor = isDark ? 'rgba(56, 189, 248, 0.13)' : 'rgba(2, 132, 199, 0.13)';
+    const axisTickColor = isDark ? 'rgba(56, 189, 248, 0.28)' : 'rgba(2, 132, 199, 0.28)';
+    const trussLineColor = isDark ? 'rgba(45, 212, 191, 0.2)' : 'rgba(13, 148, 136, 0.18)';
+    const nodeColor = isDark ? 'rgba(56, 189, 248, 0.7)' : 'rgba(2, 132, 199, 0.65)';
+    const crosshairColor = isDark ? 'rgba(56, 189, 248, 0.38)' : 'rgba(2, 132, 199, 0.38)';
+    const coordTextColor = isDark ? 'rgba(186, 230, 253, 0.75)' : 'rgba(14, 116, 144, 0.85)';
+    const waveRingColor = isDark ? 'rgba(56, 189, 248, 0.14)' : 'rgba(2, 132, 199, 0.12)';
 
-    // Smooth Mouse Interpolation (Lerp)
-    if (targetMouse.active) {
-      if (currentMouse.x === -1000) {
-        currentMouse.x = targetMouse.x;
-        currentMouse.y = targetMouse.y;
+    // Smooth Lerp for Cursor Tracking
+    if (targetPointer.active) {
+      if (currentPointer.x === -1000) {
+        currentPointer.x = targetPointer.x;
+        currentPointer.y = targetPointer.y;
       } else {
-        currentMouse.x += (targetMouse.x - currentMouse.x) * 0.1;
-        currentMouse.y += (targetMouse.y - currentMouse.y) * 0.1;
+        currentPointer.x += (targetPointer.x - currentPointer.x) * 0.12;
+        currentPointer.y += (targetPointer.y - currentPointer.y) * 0.12;
       }
     } else {
-      currentMouse.x += (width * 0.5 - currentMouse.x) * 0.02;
-      currentMouse.y += (height * 0.4 - currentMouse.y) * 0.02;
+      currentPointer.x += (width * 0.5 - currentPointer.x) * 0.03;
+      currentPointer.y += (height * 0.45 - currentPointer.y) * 0.03;
     }
 
-    const minorSize = 20;
-    const majorSize = 80;
+    // Smooth Lerp for Device Orientation Tilt
+    tilt.x += (tilt.targetX - tilt.x) * 0.08;
+    tilt.y += (tilt.targetY - tilt.y) * 0.08;
 
-    // 1. DRAW MINOR BLUEPRINT GRID LINES
+    // Update active ripples life & propagation
+    for (let i = ripples.length - 1; i >= 0; i--) {
+      const rip = ripples[i];
+      rip.radius += rip.speed;
+      rip.life -= rip.decay;
+      rip.intensity *= 0.985;
+
+      if (rip.life <= 0 || rip.radius > rip.maxRadius || rip.intensity < 0.02) {
+        ripples.splice(i, 1);
+      }
+    }
+
+    const minorSize = 25;
+    const majorSize = 100;
+
+    // 1. DRAW ELASTIC MINOR BLUEPRINT GRID LINES
     ctx.beginPath();
     ctx.setLineDash([]);
     ctx.strokeStyle = gridMinorColor;
     ctx.lineWidth = 0.5;
 
-    for (let x = 0; x < width; x += minorSize) {
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, height);
+    // Horizontal minor lines with wave curvature
+    for (let y = 0; y <= height + minorSize; y += minorSize) {
+      let isFirst = true;
+      for (let x = 0; x <= width + 50; x += 50) {
+        const { dx, dy } = getWaveDisplacement(x, y, globalTime);
+        const px = x + dx;
+        const py = y + dy;
+        if (isFirst) {
+          ctx.moveTo(px, py);
+          isFirst = false;
+        } else {
+          ctx.lineTo(px, py);
+        }
+      }
     }
-    for (let y = 0; y < height; y += minorSize) {
-      ctx.moveTo(0, y);
-      ctx.lineTo(width, y);
+
+    // Vertical minor lines with wave curvature
+    for (let x = 0; x <= width + minorSize; x += minorSize) {
+      let isFirst = true;
+      for (let y = 0; y <= height + 50; y += 50) {
+        const { dx, dy } = getWaveDisplacement(x, y, globalTime);
+        const px = x + dx;
+        const py = y + dy;
+        if (isFirst) {
+          ctx.moveTo(px, py);
+          isFirst = false;
+        } else {
+          ctx.lineTo(px, py);
+        }
+      }
     }
     ctx.stroke();
 
-    // 2. DRAW MAJOR BLUEPRINT GRID LINES
+    // 2. DRAW ELASTIC MAJOR BLUEPRINT GRID LINES
     ctx.beginPath();
     ctx.strokeStyle = gridMajorColor;
     ctx.lineWidth = 1;
 
-    for (let x = 0; x < width; x += majorSize) {
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, height);
+    for (let y = 0; y <= height + majorSize; y += majorSize) {
+      let isFirst = true;
+      for (let x = 0; x <= width + 30; x += 30) {
+        const { dx, dy } = getWaveDisplacement(x, y, globalTime);
+        const px = x + dx;
+        const py = y + dy;
+        if (isFirst) {
+          ctx.moveTo(px, py);
+          isFirst = false;
+        } else {
+          ctx.lineTo(px, py);
+        }
+      }
     }
-    for (let y = 0; y < height; y += majorSize) {
-      ctx.moveTo(0, y);
-      ctx.lineTo(width, y);
+
+    for (let x = 0; x <= width + majorSize; x += majorSize) {
+      let isFirst = true;
+      for (let y = 0; y <= height + 30; y += 30) {
+        const { dx, dy } = getWaveDisplacement(x, y, globalTime);
+        const px = x + dx;
+        const py = y + dy;
+        if (isFirst) {
+          ctx.moveTo(px, py);
+          isFirst = false;
+        } else {
+          ctx.lineTo(px, py);
+        }
+      }
     }
     ctx.stroke();
 
@@ -204,44 +507,85 @@ function initializeCADBlueprintBackground() {
     ctx.strokeStyle = axisTickColor;
     ctx.lineWidth = 1;
     const tickLen = 4;
-    for (let x = 0; x < width; x += majorSize) {
-      for (let y = 0; y < height; y += majorSize) {
+
+    for (let x = 0; x <= width + majorSize; x += majorSize) {
+      for (let y = 0; y <= height + majorSize; y += majorSize) {
+        const { dx, dy } = getWaveDisplacement(x, y, globalTime);
+        const cx = x + dx;
+        const cy = y + dy;
+
         ctx.beginPath();
-        ctx.moveTo(x - tickLen, y);
-        ctx.lineTo(x + tickLen, y);
-        ctx.moveTo(x, y - tickLen);
-        ctx.lineTo(x, y + tickLen);
+        ctx.moveTo(cx - tickLen, cy);
+        ctx.lineTo(cx + tickLen, cy);
+        ctx.moveTo(cx, cy - tickLen);
+        ctx.lineTo(cx, cy + tickLen);
         ctx.stroke();
       }
     }
 
-    // 4. DRAW STRUCTURAL TRUSS MEMBERS & NODES
-    structuralNodes.forEach((node, i) => {
-      node.pulse += 0.015;
-      node.x = node.baseX + Math.sin(node.pulse) * 6;
-      node.y = node.baseY + Math.cos(node.pulse * 0.8) * 4;
+    // 4. DRAW EXPANDING FLUID BLUEPRINT WAVE CONTOURS
+    for (let i = 0; i < ripples.length; i++) {
+      const rip = ripples[i];
+      const alpha = rip.life * rip.intensity * 0.35;
+      if (alpha > 0.01) {
+        ctx.beginPath();
+        ctx.arc(rip.x, rip.y, rip.radius, 0, Math.PI * 2);
+        ctx.setLineDash([4, 6]);
+        ctx.strokeStyle = isDark
+          ? `rgba(56, 189, 248, ${alpha})`
+          : `rgba(2, 132, 199, ${alpha})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    }
+
+    // 5. UPDATE & DRAW STRUCTURAL TRUSS MEMBERS & NODES
+    structuralNodes.forEach((node) => {
+      node.pulse += node.pulseSpeed;
+      const { dx, dy, stress } = getWaveDisplacement(node.baseX, node.baseY, globalTime);
+      node.stress = stress;
+
+      // Elastic node spring interpolation
+      const targetX = node.baseX + dx + Math.sin(node.pulse) * 6;
+      const targetY = node.baseY + dy + Math.cos(node.pulse * 0.8) * 4;
+
+      node.x += (targetX - node.x) * 0.15;
+      node.y += (targetY - node.y) * 0.15;
+    });
+
+    // Draw truss connection lines
+    const maxLinkDist = 165;
+    for (let i = 0; i < structuralNodes.length; i++) {
+      const node = structuralNodes[i];
 
       for (let j = i + 1; j < structuralNodes.length; j++) {
         const other = structuralNodes[j];
         const dx = node.x - other.x;
         const dy = node.y - other.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+        const dist = Math.hypot(dx, dy);
 
-        if (dist < 170) {
+        if (dist < maxLinkDist) {
+          const stressBonus = (node.stress + other.stress) * 0.5;
+          const alphaFactor = Math.max(0.08, (1 - dist / maxLinkDist) + stressBonus * 0.4);
+          
           ctx.beginPath();
           ctx.moveTo(node.x, node.y);
           ctx.lineTo(other.x, other.y);
           ctx.strokeStyle = trussLineColor;
-          ctx.lineWidth = Math.max(0.4, 1.2 - dist / 170);
+          ctx.lineWidth = Math.max(0.4, (1.2 - dist / maxLinkDist) + stressBonus * 0.8);
           ctx.stroke();
         }
       }
 
+      // Draw node circle
       ctx.beginPath();
-      ctx.arc(node.x, node.y, 2.5, 0, Math.PI * 2);
+      const nodeRadius = 2.4 + node.stress * 1.5;
+      ctx.arc(node.x, node.y, nodeRadius, 0, Math.PI * 2);
       ctx.fillStyle = nodeColor;
       ctx.fill();
 
+      // Draw pinned structural support icon
       if (node.isPinned) {
         ctx.beginPath();
         ctx.moveTo(node.x, node.y + 3);
@@ -252,14 +596,16 @@ function initializeCADBlueprintBackground() {
         ctx.lineWidth = 0.8;
         ctx.stroke();
       }
-    });
+    }
 
-    // 5. DRAW DYNAMIC CAD CURSOR CROSSHAIR & HUD READOUT
-    if (targetMouse.active && currentMouse.x >= 0 && currentMouse.y >= 0) {
-      const cx = currentMouse.x;
-      const cy = currentMouse.y;
+    // 6. DRAW DYNAMIC CAD CURSOR CROSSHAIR & TECHNICAL HUD READOUT
+    if (targetPointer.active && currentPointer.x >= 0 && currentPointer.y >= 0) {
+      const cx = currentPointer.x;
+      const cy = currentPointer.y;
 
       ctx.save();
+
+      // Infinite CAD crosshair guide lines
       ctx.beginPath();
       ctx.setLineDash([4, 4]);
       ctx.strokeStyle = crosshairColor;
@@ -271,6 +617,7 @@ function initializeCADBlueprintBackground() {
       ctx.lineTo(cx, height);
       ctx.stroke();
 
+      // Precision target reticle
       ctx.setLineDash([]);
       ctx.beginPath();
       ctx.arc(cx, cy, 14, 0, Math.PI * 2);
@@ -278,20 +625,27 @@ function initializeCADBlueprintBackground() {
       ctx.lineWidth = 1;
       ctx.stroke();
 
+      // Center dot
       ctx.beginPath();
-      ctx.arc(cx, cy, 2, 0, Math.PI * 2);
+      ctx.arc(cx, cy, 2.5, 0, Math.PI * 2);
       ctx.fillStyle = isDark ? '#38bdf8' : '#0284c7';
       ctx.fill();
 
-      const coordText = `CAD :: X ${Math.round(cx)} . Y ${Math.round(cy)}`;
+      // Technical HUD Readout String
+      const { stress } = getWaveDisplacement(cx, cy, globalTime);
+      const stressKPa = Math.round(stress * 240 + 45);
+      const coordText = `CAD :: X ${Math.round(cx)} . Y ${Math.round(cy)} | σ: ${stressKPa} kPa`;
+      
       ctx.font = '10px "JetBrains Mono", monospace';
       ctx.fillStyle = coordTextColor;
-      ctx.fillText(coordText, cx + 18, cy - 10);
+      ctx.fillText(coordText, Math.min(width - 210, cx + 18), Math.max(20, cy - 10));
 
       ctx.restore();
     }
 
-    if (shouldAnimate()) requestDraw();
+    if (shouldAnimate()) {
+      requestDraw();
+    }
   }
 
   function shouldAnimate() {
@@ -304,7 +658,6 @@ function initializeCADBlueprintBackground() {
     if (shouldAnimate()) {
       animationFrameId = requestAnimationFrame(draw);
     } else if (!document.hidden) {
-      // Keep one fully rendered frame for reduced-motion and offscreen states.
       animationFrameId = requestAnimationFrame(() => {
         animationFrameId = null;
         draw();
@@ -315,12 +668,13 @@ function initializeCADBlueprintBackground() {
   if ('IntersectionObserver' in window) {
     const heroObserver = new IntersectionObserver(([entry]) => {
       isHeroVisible = entry.isIntersecting;
-      if (isHeroVisible) requestDraw();
+      if (isHeroVisible) {
+        lastTimestamp = performance.now();
+        requestDraw();
+      }
     });
     heroObserver.observe(heroSection || canvas);
   } else {
-    // Without visibility observation, preserve the normal animation and still
-    // rely on document visibility and reduced-motion preferences.
     isHeroVisible = true;
     requestDraw();
   }
@@ -329,7 +683,8 @@ function initializeCADBlueprintBackground() {
     if (document.hidden && animationFrameId !== null) {
       cancelAnimationFrame(animationFrameId);
       animationFrameId = null;
-    } else {
+    } else if (!document.hidden) {
+      lastTimestamp = performance.now();
       requestDraw();
     }
   });
