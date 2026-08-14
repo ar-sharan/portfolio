@@ -1,8 +1,9 @@
 # Ahnaf Rafi Sharan
 
-**Pabna-6600, Bangladesh** · ahnaf@ce.uiu.ac.bd · +8801796549094
+**Pabna-6600, Bangladesh** · [ahnaf@ce.uiu.ac.bd](mailto:ahnaf@ce.uiu.ac.bd) · [+8801796549094](tel:+8801796549094)
 
-LinkedIn: [linkedin.com/in/ahnaf-rafi-sharan-06a0391b3](https://linkedin.com/in/ahnaf-rafi-sharan-06a0391b3)
+LinkedIn: [linkedin.com/in/ahnaf-rafi-sharan-06a0391b3](https://linkedin.com/in/ahnaf-rafi-sharan-06a0391b3)  
+Google Scholar: [scholar.google.com/citations](https://scholar.google.com/citations?user=i2RG7TsAAAAJ&hl=en)
 
 ---
 
@@ -13,20 +14,16 @@ LinkedIn: [linkedin.com/in/ahnaf-rafi-sharan-06a0391b3](https://linkedin.com/in/
 | Master of Science (M. Sc.) in Civil and Environmental Engineering — CGPA (Most Recent Semester): 3.75/4.00 | 11/2025 – Present | Islamic University of Technology (IUT) | Gazipur, Bangladesh |
 | Bachelor of Science (B. Sc.) in Civil and Environmental Engineering — CGPA: 3.91/4.00 (Rank: 3rd out of 96) | 06/2021 – 10/2025 | Islamic University of Technology (IUT) | Gazipur, Bangladesh |
 
-**Specialization / Key Courses (B. Sc.):**
-
-- Multimodal Traffic Data Analytics
-- Intelligent Transportation Systems (ITS)
-- AI-Based Traffic Flow and Road Safety Analysis
-- Transportation Policy and Planning
-- Digital Twins for Transportation Infrastructure
-- Highway & Airport Pavement Engineering
-
 ---
 
 ## RESEARCH INTERESTS
 
-*(No entries listed in source CV.)*
+- Multimodal Traffic Data Analytics
+- AI-Based Traffic Flow and Road Safety Analysis
+- Digital Twins for Transportation Infrastructure
+- Intelligent Transportation Systems (ITS)
+- Transportation Policy and Planning
+- Highway & Airport Pavement Engineering
 
 ---
 
@@ -50,7 +47,7 @@ LinkedIn: [linkedin.com/in/ahnaf-rafi-sharan-06a0391b3](https://linkedin.com/in/
 - Applied QGIS-based geospatial analysis to examine crash interactions between adjacent highway segments and mapped roadside land use and encroachment patterns.
 - Contributed to journal manuscript preparation and developed the research poster for presentation at the 105th TRB Annual Meeting (TRB 2026).
 
-### Land use, encroachment and built environment on traffic: Assessing crash risks considering the safety-critical interaction
+### Understanding Crash Risk on Highways: The Impact of Land Use, Encroachment and Built Environment
 *Supervisor: Moinul Hossain, Ph.D., Professor, CEE, IUT; Md. Asif Raihan, Ph.D., Professor, ARI, BUET*
 
 - Investigated the interaction between land use, roadside encroachment, and built-environment characteristics and their influence on highway crash risk.
@@ -72,34 +69,34 @@ LinkedIn: [linkedin.com/in/ahnaf-rafi-sharan-06a0391b3](https://linkedin.com/in/
 
 ## JOURNAL PUBLICATIONS
 
-Haque, M. R., Hossain, M. N., **Sharan, A. R.**, Aman, N., Miah, A. S. M., Istiqphara, S., & Ferdous, M. F. (2026). *Impact of unauthorized vehicles on road safety using machine learning in Bangladesh*. **International Journal of Engineering**, 27/04/2026, e-ISSN 1735-9244.
+- Haque, M. R., Hossain, M. N., **Sharan, A. R.**, Aman, N., Miah, A. S. M., Istiqphara, S., & Ferdous, M. F. (2026). *Impact of unauthorized vehicles on road safety using machine learning in Bangladesh*. **International Journal of Engineering**, 27/04/2026, e-ISSN 1735-9244. [[ResearchGate]](https://www.researchgate.net/publication/403642562_Impact_of_Unauthorized_Vehicles_on_Road_Safety_Using_Machine_Learning_in_Bangladesh)
 
-Hoque, M. J., Bayezid, M., **Sharan, A. R.**, Kabir, M. U., & Tareque, T. (2023). *Prediction of strength properties of soft soil considering simple soil parameters*. **Open Journal of Civil Engineering**, 13, 479–496. [https://doi.org/10.4236/ojce.2023.133035](https://doi.org/10.4236/ojce.2023.133035)
+- Hoque, M. J., Bayezid, M., **Sharan, A. R.**, Kabir, M. U., & Tareque, T. (2023). *Prediction of strength properties of soft soil considering simple soil parameters*. **Open Journal of Civil Engineering**, 13, 479–496. [[DOI: 10.4236/ojce.2023.133035]](https://doi.org/10.4236/ojce.2023.133035)
 
 ---
 
 ## CONFERENCE PROCEEDINGS
 
-Uddin, N., Tasnim, A., **Rafi, A.**, Raihan, M. A., Hossain, M., Fletcher, J., & Rahman, A. S. (2026). *Developing spatial crash prediction model for highways considering land use & encroachment*. Paper presented at **the 105th TRB Annual Meeting (TRB 2026)**, Washington, D.C., USA, January 11–15, 2026.
+- Uddin, N., Tasnim, A., **Rafi, A.**, Raihan, M. A., Hossain, M., Fletcher, J., & Rahman, A. S. (2026). *Developing spatial crash prediction model for highways considering land use & encroachment*. Paper presented at **the 105th TRB Annual Meeting (TRB 2026)**, Washington, D.C., USA, January 11–15, 2026. [[Event Link]](https://www.nationalacademies.org/events/886)
 
-Uddin, N., Tasnim, A., **Rafi, A.**, Raihan, M. A., & Hossain, M. (2025). *Land use, encroachment and built environment on traffic: Assessing crash risks considering the safety-critical interaction*. Paper presented at **the 16th International Conference of Eastern Asia Society for Transportation Studies (EASTS 2025)**, Surakarta, Indonesia.
+- Uddin, N., Tasnim, A., **Rafi, A.**, Raihan, M. A., & Hossain, M. (2025). *Understanding Crash Risk on Highways: The Impact of Land Use, Encroachment and Built Environment*. Paper presented at **the 16th International Conference of Eastern Asia Society for Transportation Studies (EASTS 2025)**, Surakarta, Indonesia. [[Paper Link]](https://www.jstage.jst.go.jp/article/easts/16/0/16_PP4087/_article/-char/ja/)
 
-Mohammed, T. U., Uddin, N., & **Rafi, A.** (2024). *Utilization of recycled brick aggregate to ensure circular economy*. In Proceedings of the 1st International Conference on Core Engineering & Technology (IUT-ICCET 2024), Gazipur, Bangladesh. **IUT Journal of Engineering and Technology (JET)**, Special Issue, 848–854.
+- Mohammed, T. U., Uddin, N., & **Rafi, A.** (2024). *Utilization of recycled brick aggregate to ensure circular economy*. In Proceedings of the 1st International Conference on Core Engineering & Technology (IUT-ICCET 2024), Gazipur, Bangladesh. **IUT Journal of Engineering and Technology (JET)**, Special Issue, 848–854. [[ResearchGate]](https://www.researchgate.net/publication/397412213_Utilization_of_Recycled_Brick_Aggregate_to_Ensure_Circular_Economy)
 
 ---
 
 ## PROFESSIONAL EXPERIENCE
 
-**Lecturer, Department of Civil Engineering** — 11/2025 – Present
-*United International University (UIU)* · Dhaka, Bangladesh
+**Lecturer, Department of Civil Engineering** — 11/2025 – Present  
+*United International University (UIU)* · Dhaka, Bangladesh  
 
 Relevant Courses Taught:
 - GIS and Remote Sensing Lab
 - Engineering Hydrology
 - Engineering Geology and Geomorphology
 
-**Industrial Training at SMEC (Bangladesh) Ltd.** — 03/2024 – 03/2024
-Dhaka, Bangladesh
+**Industrial Training at SMEC (Bangladesh) Ltd.** — 03/2024 – 03/2024  
+Dhaka, Bangladesh  
 
 ---
 
@@ -147,24 +144,34 @@ Dhaka, Bangladesh
 
 ## CERTIFICATIONS
 
-- Certification of Accomplishment for completing Industrial Training at SMEC BD Ltd.
-- Certification of Accomplishment for 'Data Visualization with Matplotlib' in Datacamp
-- Certification of Accomplishment for 'Data Visualization with Seaborn' in Datacamp
+- [Certification of Accomplishment for completing Industrial Training at SMEC BD Ltd.](https://drive.google.com/file/d/1yum1FE88BUkocRvjSnJ1ATe02TE9FvEe/view?usp=drive_link)
+- [Certification of Accomplishment for 'Data Visualization with Matplotlib' in Datacamp](https://drive.google.com/file/d/1rNb2d6eBjtzPnhZv8_Qu4rBEHmmwyTqB/view?usp=drive_link)
+- [Certification of Accomplishment for 'Data Visualization with Seaborn' in Datacamp](https://drive.google.com/file/d/1IVfnXumZgSmWMktTuvSF0Q7bto8k0CpD/view?usp=drive_link)
 
 ---
 
 ## EXTRACURRICULAR ACTIVITIES
 
-**CENNOVATION 2025** — IUT, Gazipur
-Hosted by Department of Civil and Environmental Engineering, IUT
-*Position:* Assistant General Secretary
+**CENNOVATION 2025** — IUT, Gazipur  
+Hosted by Department of Civil and Environmental Engineering, IUT  
+*Position:* Assistant General Secretary  
 
-**ACI Students' Chapters Meet 2025** — IUT, Gazipur
-Hosted by ACI IUT Student Chapter
-*Position:* Design Team Lead
+**ACI Students' Chapters Meet 2025** — IUT, Gazipur  
+Hosted by ACI IUT Student Chapter  
+*Position:* Design Team Lead  
 
-**ACI IUT Student Chapter** — IUT, Gazipur
-*Position:* Head of Creative Design
+**ACI IUT Student Chapter** — IUT, Gazipur  
+*Position:* Head of Creative Design  
 
-**IUT ITE Student Chapter** — IUT, Gazipur
-*Position:* Technical Executive
+**IUT ITE Student Chapter** — IUT, Gazipur  
+*Position:* Technical Executive  
+
+---
+
+## COMMUNITY INVOLVEMENT
+
+**Winter Clothes Donation, IUT SIKS** (2023 – 2024 | Gazipur, Dhaka)  
+Participated in donating winter clothing to underprivileged communities in Gazipur  
+
+**Blood Donor, Badhan Jahangirnagar University Zone** (2021 – Present | Savar, Dhaka)  
+Active blood donor and volunteer in awareness campaigns

@@ -841,6 +841,62 @@ button {
   flex-shrink: 0;
 }
 
+.community-card {
+  margin-top: 1.25rem;
+}
+
+.community-title {
+  color: var(--accent-teal);
+}
+
+.achievement-badge.community-badge {
+  background: var(--accent-teal-soft);
+  color: var(--accent-teal);
+  border: 1px solid rgba(13, 148, 136, 0.3);
+}
+
+.cert-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  background: var(--accent-cyan-soft);
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(2, 132, 199, 0.25);
+  margin-left: 0.4rem;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.cert-link:hover {
+  background: var(--accent-cyan);
+  color: #ffffff;
+  border-color: var(--accent-cyan);
+  transform: translateY(-1px);
+}
+
+.skill-badge.cert-badge {
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.skill-badge.cert-badge:hover {
+  border-color: var(--accent-cyan);
+  background: var(--accent-cyan-soft);
+  transform: translateY(-2px);
+  color: var(--accent-cyan);
+}
+
+.badge-cert-icon {
+  font-size: 0.65rem;
+  margin-left: 0.25rem;
+  opacity: 0.75;
+}
+
 /* --------------------------------------------------------------------------
    6. TEACHING & ACADEMIA SECTION
    -------------------------------------------------------------------------- */
