@@ -980,6 +980,10 @@ button {
   flex-wrap: wrap;
 }
 
+.carousel-header-controls .filter-bar {
+  margin-bottom: 0;
+}
+
 .carousel-header-controls.right-aligned {
   justify-content: flex-end;
 }
@@ -1033,16 +1037,21 @@ button {
 .carousel-container {
   overflow-x: auto;
   scroll-behavior: smooth;
-  scroll-snap-type: x proximity;
+  scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
   -ms-overflow-style: none;
   padding: 0.5rem 0.25rem 1.25rem 0.25rem;
   margin: -0.5rem -0.25rem 0 -0.25rem;
-  cursor: grab;
-  touch-action: pan-y pinch-zoom;
+  touch-action: pan-x pan-y pinch-zoom;
   will-change: scroll-position;
+}
+
+@media (pointer: fine) {
+  .carousel-container {
+    cursor: grab;
+  }
 }
 
 .carousel-container::-webkit-scrollbar {
@@ -1050,8 +1059,7 @@ button {
 }
 
 .carousel-container.is-dragging,
-.carousel-container.grabbing,
-.carousel-container.is-animating {
+.carousel-container.grabbing {
   cursor: grabbing !important;
   scroll-behavior: auto !important;
   scroll-snap-type: none !important;
@@ -1073,13 +1081,13 @@ button {
   flex: 0 0 calc(34% - 0.85rem);
   min-width: 290px;
   scroll-snap-align: start;
+  scroll-snap-stop: normal;
   flex-direction: column !important;
   justify-content: space-between !important;
   grid-template-columns: none !important;
   margin: 0;
   box-sizing: border-box;
   height: auto;
-  will-change: transform;
   backface-visibility: hidden;
   transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.25s ease, background-color 0.25s ease;
 }

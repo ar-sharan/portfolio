@@ -438,23 +438,17 @@ function initializeCarousels() {
     const prevBtn = document.querySelector(`.carousel-btn.prev-btn[data-target="${id}"]`);
     const nextBtn = document.querySelector(`.carousel-btn.next-btn[data-target="${id}"]`);
 
-    let autoPlayTimer = null;
-    let isMouseOver = false;
-    let hasFocus = false;
     let isDragging = false;
     let dragPointerId = null;
     let startX = 0;
     let startScrollLeft = 0;
-    let lastX = 0;
-    let lastTime = 0;
-    let velocity = 0;
-    let momentumFrameId = null;
-    let scrollRafId = null;
     let wasDragged = false;
+    let scrollRafId = null;
 
     container.setAttribute('role', 'region');
     container.setAttribute('aria-roledescription', 'carousel');
     container.setAttribute('aria-label', id === 'pub-carousel' ? 'Publications' : 'Projects');
+    container.setAttribute('tabindex', '0');
 
     function getVisibleCards() {
       return Array.from(container.querySelectorAll('.pub-card, .project-card')).filter(card => {
@@ -527,16 +521,7 @@ function initializeCarousels() {
       }
     }
 
-    function cancelMomentum() {
-      if (momentumFrameId !== null) {
-        cancelAnimationFrame(momentumFrameId);
-        momentumFrameId = null;
-      }
-      container.classList.remove('is-animating');
-    }
-
     function scrollToCard(index, smooth = true) {
-      cancelMomentum();
       const visibleCards = getVisibleCards();
       if (!visibleCards.length) return;
 
@@ -554,12 +539,11 @@ function initializeCarousels() {
       });
     }
 
-    // Step precisely 1 card forward or backward
     function stepNext() {
       const visibleCards = getVisibleCards();
       if (!visibleCards.length) return;
       const currentScroll = container.scrollLeft;
-      let targetIdx = visibleCards.findIndex(card => (card.offsetLeft - container.offsetLeft) > currentScroll + 10);
+      let targetIdx = visibleCards.findIndex(card => (card.offsetLeft - container.offsetLeft) > currentScroll + 12);
       if (targetIdx === -1) {
         targetIdx = visibleCards.length - 1;
       }
@@ -572,7 +556,7 @@ function initializeCarousels() {
       const currentScroll = container.scrollLeft;
       let targetIdx = 0;
       for (let i = visibleCards.length - 1; i >= 0; i--) {
-        if ((visibleCards[i].offsetLeft - container.offsetLeft) < currentScroll - 10) {
+        if ((visibleCards[i].offsetLeft - container.offsetLeft) < currentScroll - 12) {
           targetIdx = i;
           break;
         }
@@ -583,26 +567,30 @@ function initializeCarousels() {
     prevBtn?.addEventListener('click', stepPrev);
     nextBtn?.addEventListener('click', stepNext);
 
-    // 1:1 Direct Pointer Drag with Kinetic Momentum
+    // Keyboard Arrow navigation for accessibility
+    container.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        stepNext();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        stepPrev();
+      }
+    });
+
+    // DESKTOP ONLY: Mouse pointer drag (Touch pointer events are strictly bypassed so phones use 100% native smooth touch momentum)
     container.addEventListener('pointerdown', (e) => {
-      // Only drag on primary click or touch on container
-      if (e.button !== 0 && e.pointerType === 'mouse') return;
-      cancelMomentum();
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
 
       isDragging = true;
       dragPointerId = e.pointerId;
       startX = e.clientX;
       startScrollLeft = container.scrollLeft;
-      lastX = e.clientX;
-      lastTime = performance.now();
-      velocity = 0;
       wasDragged = false;
-
-      container.classList.add('is-dragging');
     });
 
     window.addEventListener('pointermove', (e) => {
-      if (!isDragging || e.pointerId !== dragPointerId) return;
+      if (!isDragging || e.pointerId !== dragPointerId || e.pointerType !== 'mouse') return;
 
       const currentX = e.clientX;
       const deltaX = currentX - startX;
@@ -610,35 +598,20 @@ function initializeCarousels() {
       if (Math.abs(deltaX) > 6) {
         if (!wasDragged) {
           wasDragged = true;
-          container.setPointerCapture?.(dragPointerId);
+          container.classList.add('is-dragging');
         }
+        container.scrollLeft = startScrollLeft - deltaX;
       }
-
-      const now = performance.now();
-      const dt = now - lastTime;
-      if (dt > 8) {
-        velocity = (lastX - currentX) / dt; // pixels per ms
-        lastX = currentX;
-        lastTime = now;
-      }
-
-      container.scrollLeft = startScrollLeft - deltaX;
     });
 
     function stopDragging(e) {
       if (!isDragging || (e && dragPointerId !== null && e.pointerId !== dragPointerId)) return;
       isDragging = false;
+      dragPointerId = null;
       container.classList.remove('is-dragging');
 
-      if (dragPointerId !== null && container.hasPointerCapture?.(dragPointerId)) {
-        try {
-          container.releasePointerCapture(dragPointerId);
-        } catch {}
-      }
-      dragPointerId = null;
-
-      // Prevent triggering click on links/buttons inside card if dragging occurred
       if (wasDragged) {
+        // Prevent accidental link/button clicks if dragging occurred
         const preventClickCapture = (clickEvt) => {
           clickEvt.preventDefault();
           clickEvt.stopPropagation();
@@ -646,29 +619,8 @@ function initializeCarousels() {
         };
         window.addEventListener('click', preventClickCapture, true);
         setTimeout(() => window.removeEventListener('click', preventClickCapture, true), 100);
-      }
 
-      // Kinetic Momentum Flick Deceleration
-      if (Math.abs(velocity) > 0.15 && !reducedMotionQuery.matches) {
-        let currentVelocity = velocity * 14;
-        const friction = 0.92;
-        container.classList.add('is-animating');
-
-        function momentumStep() {
-          if (Math.abs(currentVelocity) > 0.5 && !isDragging) {
-            container.scrollLeft += currentVelocity;
-            currentVelocity *= friction;
-            momentumFrameId = requestAnimationFrame(momentumStep);
-          } else {
-            cancelMomentum();
-            // Smoothly settle onto closest card
-            const closest = getActiveCardIndex();
-            scrollToCard(closest);
-          }
-        }
-        momentumFrameId = requestAnimationFrame(momentumStep);
-      } else {
-        // Settle smoothly to nearest card
+        // Settle smoothly onto closest card
         const closest = getActiveCardIndex();
         scrollToCard(closest);
       }
@@ -677,59 +629,13 @@ function initializeCarousels() {
     window.addEventListener('pointerup', stopDragging);
     window.addEventListener('pointercancel', stopDragging);
 
-    // Scroll listener with requestAnimationFrame
+    // Synchronize dots and button states via passive scroll listener
     container.addEventListener('scroll', scheduleControlsUpdate, { passive: true });
-
-    // Subtle Smooth Autoplay (6s interval)
-    function startAutoPlay() {
-      stopAutoPlay();
-      if (reducedMotionQuery.matches || document.hidden) return;
-
-      autoPlayTimer = setInterval(() => {
-        if (isMouseOver || hasFocus || isDragging || document.hidden) return;
-        const visibleCards = getVisibleCards();
-        if (visibleCards.length <= 1) return;
-
-        const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
-        const currentActive = getActiveCardIndex();
-
-        if (currentActive >= visibleCards.length - 1 || container.scrollLeft >= maxScroll - 15) {
-          scrollToCard(0);
-        } else {
-          scrollToCard(currentActive + 1);
-        }
-      }, 6000);
-    }
-
-    function stopAutoPlay() {
-      if (autoPlayTimer) {
-        clearInterval(autoPlayTimer);
-        autoPlayTimer = null;
-      }
-    }
-
-    container.addEventListener('mouseenter', () => { isMouseOver = true; }, { passive: true });
-    container.addEventListener('mouseleave', () => { isMouseOver = false; }, { passive: true });
-    container.addEventListener('touchstart', () => { isMouseOver = true; }, { passive: true });
-    container.addEventListener('touchend', () => { isMouseOver = false; }, { passive: true });
-    container.addEventListener('focusin', () => { hasFocus = true; });
-    container.addEventListener('focusout', (e) => {
-      if (!container.contains(e.relatedTarget)) hasFocus = false;
-    });
-
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) stopAutoPlay();
-      else startAutoPlay();
-    });
-    reducedMotionQuery.addEventListener?.('change', startAutoPlay);
-
-    startAutoPlay();
 
     // Store instance reference for filter updates
     carouselInstances[id] = {
       container,
       update: () => {
-        cancelMomentum();
         container.scrollTo({ left: 0, behavior: 'auto' });
         if (dotsContainer) dotsContainer.innerHTML = '';
         setTimeout(updateControls, 40);
