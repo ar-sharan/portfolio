@@ -857,11 +857,11 @@ button {
   box-shadow: var(--shadow-sm);
   position: relative;
   overflow: hidden;
-  transition: all var(--transition-fast);
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.25s ease;
 }
 
 .teaching-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-md);
   border-color: var(--accent-cyan);
 }
@@ -999,7 +999,7 @@ button {
   font-size: 0.95rem;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
-  transition: all var(--transition-fast);
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 
 .carousel-btn:hover {
@@ -1015,37 +1015,44 @@ button {
 }
 
 .carousel-btn:active {
-  transform: translateY(0);
+  transform: scale(0.94);
 }
 
 .carousel-btn:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+  pointer-events: none;
 }
 
 .carousel-container {
   overflow-x: auto;
   scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
   scrollbar-width: none;
   -ms-overflow-style: none;
   padding: 0.5rem 0.25rem 1.25rem 0.25rem;
   margin: -0.5rem -0.25rem 0 -0.25rem;
   cursor: grab;
+  touch-action: pan-y pinch-zoom;
+  will-change: scroll-position;
 }
 
 .carousel-container::-webkit-scrollbar {
   display: none;
 }
 
-.carousel-container.grabbing {
-  cursor: grabbing;
-  scroll-behavior: auto;
-  scroll-snap-type: none;
-  user-select: none;
+.carousel-container.is-dragging,
+.carousel-container.grabbing,
+.carousel-container.is-animating {
+  cursor: grabbing !important;
+  scroll-behavior: auto !important;
+  scroll-snap-type: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
 }
 
 .carousel-track {
@@ -1054,6 +1061,7 @@ button {
   flex-wrap: nowrap !important;
   gap: 1.5rem !important;
   width: 100%;
+  will-change: transform;
 }
 
 .pub-list.carousel-track .pub-card,
@@ -1061,13 +1069,15 @@ button {
   flex: 0 0 calc(41% - 0.75rem);
   min-width: 310px;
   scroll-snap-align: start;
-  scroll-snap-stop: always;
   flex-direction: column !important;
   justify-content: space-between !important;
   grid-template-columns: none !important;
   margin: 0;
   box-sizing: border-box;
   height: auto;
+  will-change: transform;
+  backface-visibility: hidden;
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.25s ease, background-color 0.25s ease;
 }
 
 .carousel-dots {
@@ -1080,42 +1090,38 @@ button {
 
 .carousel-dot {
   position: relative;
-  width: 42px;
-  height: 42px;
-  margin: -16px;
+  width: 36px;
+  height: 36px;
+  margin: -6px;
   border-radius: 50%;
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: all var(--transition-fast);
   padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
 }
 
 .carousel-dot::before {
   content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 26px;
-  height: 10px;
-  transform: translate(-50%, -50%);
+  display: block;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--border-color);
-  transition: all var(--transition-fast);
-}
-
-.carousel-dot.active {
-  margin-inline: -8px;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, border-radius 0.25s ease;
 }
 
 .carousel-dot.active::before {
-  width: 26px;
+  width: 24px;
   border-radius: var(--radius-pill);
   background: var(--accent-cyan);
 }
 
-.carousel-dot:not(.active)::before {
-  width: 10px;
+.carousel-dot:not(.active):hover::before {
+  background: var(--text-light);
 }
 
 .carousel-dot:focus-visible {
@@ -1151,7 +1157,7 @@ button {
   border-radius: var(--radius-lg);
   padding: 2rem;
   box-shadow: var(--shadow-sm);
-  transition: all var(--transition-fast);
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.25s ease;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1257,11 +1263,11 @@ button {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all var(--transition-fast);
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.25s ease;
 }
 
 .project-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-md);
   border-color: var(--accent-cyan);
 }
@@ -2029,6 +2035,21 @@ textarea.form-control {
     opacity: 0;
     transform: translateY(-10px) scale(0.95);
   }
+}
+
+/* --------------------------------------------------------------------------
+   MINIMALIST SCROLL ENTRANCE REVEAL SYSTEM
+   -------------------------------------------------------------------------- */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-item.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {

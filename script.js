@@ -441,6 +441,16 @@ function initializeCarousels() {
     let autoPlayTimer = null;
     let isMouseOver = false;
     let hasFocus = false;
+    let isDragging = false;
+    let dragPointerId = null;
+    let startX = 0;
+    let startScrollLeft = 0;
+    let lastX = 0;
+    let lastTime = 0;
+    let velocity = 0;
+    let momentumFrameId = null;
+    let scrollRafId = null;
+    let wasDragged = false;
 
     container.setAttribute('role', 'region');
     container.setAttribute('aria-roledescription', 'carousel');
@@ -448,32 +458,46 @@ function initializeCarousels() {
 
     function getVisibleCards() {
       return Array.from(container.querySelectorAll('.pub-card, .project-card')).filter(card => {
-        return window.getComputedStyle(card).display !== 'none';
+        return !card.classList.contains('is-filtered-out') && window.getComputedStyle(card).display !== 'none';
       });
     }
 
+    function getActiveCardIndex() {
+      const visibleCards = getVisibleCards();
+      if (!visibleCards.length) return 0;
+
+      const scrollLeft = container.scrollLeft;
+      let closestIdx = 0;
+      let minDistance = Infinity;
+
+      visibleCards.forEach((card, idx) => {
+        const cardLeft = card.offsetLeft - container.offsetLeft;
+        const dist = Math.abs(cardLeft - scrollLeft);
+        if (dist < minDistance) {
+          minDistance = dist;
+          closestIdx = idx;
+        }
+      });
+
+      return closestIdx;
+    }
+
     function updateControls() {
+      scrollRafId = null;
       const visibleCards = getVisibleCards();
       if (!visibleCards.length) return;
 
       const scrollLeft = container.scrollLeft;
-      const maxScroll = container.scrollWidth - container.clientWidth;
+      const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
+      const activeIndex = getActiveCardIndex();
 
       // Update Prev / Next button disabled states
-      if (prevBtn) prevBtn.disabled = scrollLeft <= 10;
-      if (nextBtn) nextBtn.disabled = scrollLeft >= maxScroll - 10;
-
-      // Calculate active card index
-      let activeIndex = 0;
-      let minDistance = Infinity;
-      visibleCards.forEach((card, index) => {
-        const cardOffset = card.offsetLeft - container.offsetLeft;
-        const distance = Math.abs(cardOffset - scrollLeft);
-        if (distance < minDistance) {
-          minDistance = distance;
-          activeIndex = index;
-        }
-      });
+      if (prevBtn) {
+        prevBtn.disabled = scrollLeft <= 4;
+      }
+      if (nextBtn) {
+        nextBtn.disabled = scrollLeft >= maxScroll - 4;
+      }
 
       // Render or update navigation dots
       if (dotsContainer) {
@@ -481,16 +505,11 @@ function initializeCarousels() {
           dotsContainer.innerHTML = '';
           visibleCards.forEach((_, idx) => {
             const dot = document.createElement('button');
+            dot.type = 'button';
             dot.className = `carousel-dot ${idx === activeIndex ? 'active' : ''}`;
             dot.setAttribute('aria-label', `Go to slide ${idx + 1}`);
             dot.addEventListener('click', () => {
-              const targetCard = visibleCards[idx];
-              if (targetCard) {
-                container.scrollTo({
-                  left: targetCard.offsetLeft - container.offsetLeft,
-                  behavior: reducedMotionQuery.matches ? 'auto' : 'smooth'
-                });
-              }
+              scrollToCard(idx);
             });
             dotsContainer.appendChild(dot);
           });
@@ -502,79 +521,182 @@ function initializeCarousels() {
       }
     }
 
-    // Prev / Next button click events
-    prevBtn?.addEventListener('click', () => {
-      const visibleCards = getVisibleCards();
-      if (!visibleCards.length) return;
-      const scrollStep = container.clientWidth * 0.75;
-      container.scrollBy({ left: -scrollStep, behavior: reducedMotionQuery.matches ? 'auto' : 'smooth' });
-    });
-
-    nextBtn?.addEventListener('click', () => {
-      const visibleCards = getVisibleCards();
-      if (!visibleCards.length) return;
-      const scrollStep = container.clientWidth * 0.75;
-      container.scrollBy({ left: scrollStep, behavior: reducedMotionQuery.matches ? 'auto' : 'smooth' });
-    });
-
-    // Mouse drag scrolling via Pointer Events; touch retains native scrolling.
-    let isDragging = false;
-    let startX = 0;
-    let startScrollLeft = 0;
-    let dragPointerId = null;
-
-    container.addEventListener('pointerdown', (e) => {
-      if (e.pointerType !== 'mouse' || e.button !== 0 || e.target.closest('a, button')) return;
-      isDragging = true;
-      dragPointerId = e.pointerId;
-      container.setPointerCapture?.(e.pointerId);
-      container.classList.add('grabbing');
-      startX = e.pageX - container.offsetLeft;
-      startScrollLeft = container.scrollLeft;
-    });
-
-    container.addEventListener('pointermove', (e) => {
-      if (!isDragging || e.pointerId !== dragPointerId) return;
-      e.preventDefault();
-      const x = e.pageX - container.offsetLeft;
-      const walk = (x - startX) * 1.5;
-      container.scrollLeft = startScrollLeft - walk;
-    });
-
-    function stopDragging(e) {
-      if (e && dragPointerId !== null && e.pointerId !== dragPointerId) return;
-      if (isDragging) {
-        isDragging = false;
-        if (dragPointerId !== null && container.hasPointerCapture?.(dragPointerId)) {
-          container.releasePointerCapture(dragPointerId);
-        }
-        dragPointerId = null;
-        container.classList.remove('grabbing');
+    function scheduleControlsUpdate() {
+      if (scrollRafId === null) {
+        scrollRafId = requestAnimationFrame(updateControls);
       }
     }
 
-    container.addEventListener('pointerup', stopDragging);
-    container.addEventListener('pointercancel', stopDragging);
+    function cancelMomentum() {
+      if (momentumFrameId !== null) {
+        cancelAnimationFrame(momentumFrameId);
+        momentumFrameId = null;
+      }
+      container.classList.remove('is-animating');
+    }
 
-    // Scroll listener with throttle update
-    let scrollTimeout;
-    container.addEventListener('scroll', () => {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(updateControls, 40);
+    function scrollToCard(index, smooth = true) {
+      cancelMomentum();
+      const visibleCards = getVisibleCards();
+      if (!visibleCards.length) return;
+
+      const targetIdx = Math.max(0, Math.min(index, visibleCards.length - 1));
+      const targetCard = visibleCards[targetIdx];
+      if (!targetCard) return;
+
+      const targetLeft = targetCard.offsetLeft - container.offsetLeft;
+      const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
+      const clampedScroll = Math.max(0, Math.min(targetLeft, maxScroll));
+
+      container.scrollTo({
+        left: clampedScroll,
+        behavior: (smooth && !reducedMotionQuery.matches) ? 'smooth' : 'auto'
+      });
+    }
+
+    // Step precisely 1 card forward or backward
+    function stepNext() {
+      const visibleCards = getVisibleCards();
+      if (!visibleCards.length) return;
+      const currentScroll = container.scrollLeft;
+      let targetIdx = visibleCards.findIndex(card => (card.offsetLeft - container.offsetLeft) > currentScroll + 10);
+      if (targetIdx === -1) {
+        targetIdx = visibleCards.length - 1;
+      }
+      scrollToCard(targetIdx);
+    }
+
+    function stepPrev() {
+      const visibleCards = getVisibleCards();
+      if (!visibleCards.length) return;
+      const currentScroll = container.scrollLeft;
+      let targetIdx = 0;
+      for (let i = visibleCards.length - 1; i >= 0; i--) {
+        if ((visibleCards[i].offsetLeft - container.offsetLeft) < currentScroll - 10) {
+          targetIdx = i;
+          break;
+        }
+      }
+      scrollToCard(targetIdx);
+    }
+
+    prevBtn?.addEventListener('click', stepPrev);
+    nextBtn?.addEventListener('click', stepNext);
+
+    // 1:1 Direct Pointer Drag with Kinetic Momentum
+    container.addEventListener('pointerdown', (e) => {
+      // Only drag on primary click or touch on container
+      if (e.button !== 0 && e.pointerType === 'mouse') return;
+      cancelMomentum();
+
+      isDragging = true;
+      dragPointerId = e.pointerId;
+      startX = e.clientX;
+      startScrollLeft = container.scrollLeft;
+      lastX = e.clientX;
+      lastTime = performance.now();
+      velocity = 0;
+      wasDragged = false;
+
+      container.classList.add('is-dragging');
     });
 
-    // Auto Play timer (pauses on hover & touch)
+    window.addEventListener('pointermove', (e) => {
+      if (!isDragging || e.pointerId !== dragPointerId) return;
+
+      const currentX = e.clientX;
+      const deltaX = currentX - startX;
+
+      if (Math.abs(deltaX) > 6) {
+        if (!wasDragged) {
+          wasDragged = true;
+          container.setPointerCapture?.(dragPointerId);
+        }
+      }
+
+      const now = performance.now();
+      const dt = now - lastTime;
+      if (dt > 8) {
+        velocity = (lastX - currentX) / dt; // pixels per ms
+        lastX = currentX;
+        lastTime = now;
+      }
+
+      container.scrollLeft = startScrollLeft - deltaX;
+    });
+
+    function stopDragging(e) {
+      if (!isDragging || (e && dragPointerId !== null && e.pointerId !== dragPointerId)) return;
+      isDragging = false;
+      container.classList.remove('is-dragging');
+
+      if (dragPointerId !== null && container.hasPointerCapture?.(dragPointerId)) {
+        try {
+          container.releasePointerCapture(dragPointerId);
+        } catch {}
+      }
+      dragPointerId = null;
+
+      // Prevent triggering click on links/buttons inside card if dragging occurred
+      if (wasDragged) {
+        const preventClickCapture = (clickEvt) => {
+          clickEvt.preventDefault();
+          clickEvt.stopPropagation();
+          window.removeEventListener('click', preventClickCapture, true);
+        };
+        window.addEventListener('click', preventClickCapture, true);
+        setTimeout(() => window.removeEventListener('click', preventClickCapture, true), 100);
+      }
+
+      // Kinetic Momentum Flick Deceleration
+      if (Math.abs(velocity) > 0.15 && !reducedMotionQuery.matches) {
+        let currentVelocity = velocity * 14;
+        const friction = 0.92;
+        container.classList.add('is-animating');
+
+        function momentumStep() {
+          if (Math.abs(currentVelocity) > 0.5 && !isDragging) {
+            container.scrollLeft += currentVelocity;
+            currentVelocity *= friction;
+            momentumFrameId = requestAnimationFrame(momentumStep);
+          } else {
+            cancelMomentum();
+            // Smoothly settle onto closest card
+            const closest = getActiveCardIndex();
+            scrollToCard(closest);
+          }
+        }
+        momentumFrameId = requestAnimationFrame(momentumStep);
+      } else {
+        // Settle smoothly to nearest card
+        const closest = getActiveCardIndex();
+        scrollToCard(closest);
+      }
+    }
+
+    window.addEventListener('pointerup', stopDragging);
+    window.addEventListener('pointercancel', stopDragging);
+
+    // Scroll listener with requestAnimationFrame
+    container.addEventListener('scroll', scheduleControlsUpdate, { passive: true });
+
+    // Subtle Smooth Autoplay (6s interval)
     function startAutoPlay() {
       stopAutoPlay();
       if (reducedMotionQuery.matches || document.hidden) return;
+
       autoPlayTimer = setInterval(() => {
         if (isMouseOver || hasFocus || isDragging || document.hidden) return;
-        const maxScroll = container.scrollWidth - container.clientWidth;
-        if (container.scrollLeft >= maxScroll - 15) {
-          container.scrollTo({ left: 0, behavior: 'smooth' });
+        const visibleCards = getVisibleCards();
+        if (visibleCards.length <= 1) return;
+
+        const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
+        const currentActive = getActiveCardIndex();
+
+        if (currentActive >= visibleCards.length - 1 || container.scrollLeft >= maxScroll - 15) {
+          scrollToCard(0);
         } else {
-          const scrollStep = container.clientWidth * 0.75;
-          container.scrollBy({ left: scrollStep, behavior: 'smooth' });
+          scrollToCard(currentActive + 1);
         }
       }, 6000);
     }
@@ -586,8 +708,8 @@ function initializeCarousels() {
       }
     }
 
-    container.addEventListener('mouseenter', () => { isMouseOver = true; });
-    container.addEventListener('mouseleave', () => { isMouseOver = false; });
+    container.addEventListener('mouseenter', () => { isMouseOver = true; }, { passive: true });
+    container.addEventListener('mouseleave', () => { isMouseOver = false; }, { passive: true });
     container.addEventListener('touchstart', () => { isMouseOver = true; }, { passive: true });
     container.addEventListener('touchend', () => { isMouseOver = false; }, { passive: true });
     container.addEventListener('focusin', () => { hasFocus = true; });
@@ -607,13 +729,14 @@ function initializeCarousels() {
     carouselInstances[id] = {
       container,
       update: () => {
+        cancelMomentum();
         container.scrollTo({ left: 0, behavior: 'auto' });
         if (dotsContainer) dotsContainer.innerHTML = '';
-        setTimeout(updateControls, 50);
+        setTimeout(updateControls, 40);
       }
     };
 
-    // Initial calculation
+    // Initial controls calculation
     updateControls();
   });
 }
@@ -951,12 +1074,13 @@ function initializeCommandPalette() {
    7. SCROLL ENTRANCE ANIMATIONS (INTERSECTION OBSERVER)
    -------------------------------------------------------------------------- */
 function initializeScrollAnimations() {
-  const animatedElements = document.querySelectorAll('.pub-card, .teaching-card, .project-card, .skill-category, .timeline-card');
+  const animatedElements = document.querySelectorAll(
+    '.section-header, .timeline-card, .research-pipeline-card, .achievements-card, .teaching-card, .featured-pub-spotlight, .carousel-wrapper, .skill-category, .contact-card, .contact-form-container'
+  );
 
   if (reducedMotionQuery.matches || !('IntersectionObserver' in window)) {
     animatedElements.forEach(el => {
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
+      el.classList.add('is-revealed');
     });
     return;
   }
@@ -964,19 +1088,17 @@ function initializeScrollAnimations() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
+        entry.target.classList.add('is-revealed');
         observer.unobserve(entry.target);
       }
     });
   }, {
-    threshold: 0.1
+    threshold: 0.08,
+    rootMargin: '0px 0px -40px 0px'
   });
 
   animatedElements.forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(25px)';
-    el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+    el.classList.add('reveal-item');
     observer.observe(el);
   });
 }
