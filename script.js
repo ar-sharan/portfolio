@@ -44,10 +44,9 @@ function initializeTheme() {
   const themeIcon = document.getElementById('themeIcon');
   const htmlElem = document.documentElement;
 
-  // Retrieve saved preference or default to system preference
+  // Retrieve saved preference or default strictly to light mode
   const savedTheme = safeStorageGet('sharan_theme');
-  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const currentTheme = savedTheme || (systemDark ? 'dark' : 'light');
+  const currentTheme = savedTheme === 'dark' ? 'dark' : 'light';
 
   applyTheme(currentTheme);
 
