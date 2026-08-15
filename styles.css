@@ -256,20 +256,6 @@ button {
   text-decoration: none;
 }
 
-.brand-avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center 15%;
-  border: 2px solid var(--accent-cyan);
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast);
-}
-
-.nav-brand:hover .brand-avatar {
-  transform: scale(1.08);
-}
 
 .brand-text {
   display: flex;
@@ -283,6 +269,11 @@ button {
   color: var(--text-main);
   line-height: 1.1;
   white-space: nowrap;
+}
+
+.brand-highlight {
+  color: var(--accent-cyan);
+  transition: color var(--transition-fast);
 }
 
 .brand-name-short {
@@ -753,15 +744,23 @@ button {
   color: var(--text-muted);
 }
 
-/* Achievements Card inside Academic & Background section */
+/* Achievements & Community Row Grid */
+.achievements-row-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+}
+
 .achievements-card {
-  margin-top: 2rem;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 1.4rem;
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  display: flex;
+  flex-direction: column;
 }
 
 .achievements-card:hover {
@@ -779,9 +778,10 @@ button {
 }
 
 .achievements-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
+  flex: 1;
 }
 
 .achievement-item {
@@ -793,6 +793,7 @@ button {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   transition: border-color var(--transition-fast), transform var(--transition-fast);
+  flex: 1;
 }
 
 .achievement-item:hover {
@@ -863,7 +864,7 @@ button {
 }
 
 .community-card {
-  margin-top: 1.25rem;
+  margin-top: 0;
 }
 
 .community-title {
@@ -923,7 +924,7 @@ button {
    -------------------------------------------------------------------------- */
 .teaching-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
 }
 
@@ -931,11 +932,13 @@ button {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 1.35rem;
+  padding: 1.25rem;
   box-shadow: var(--shadow-sm);
   position: relative;
   overflow: hidden;
-  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
 .teaching-card:hover {
@@ -944,67 +947,118 @@ button {
   border-color: var(--accent-cyan);
 }
 
-.teaching-card::after {
+.teaching-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
-  width: 4px;
-  height: 100%;
-  background: var(--accent-cyan);
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-teal));
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.teaching-card:hover::before {
+  opacity: 1;
+}
+
+.teaching-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
 }
 
 .teaching-code {
   font-family: var(--font-mono);
-  font-size: 0.76rem;
-  color: var(--accent-gold);
+  font-size: 0.78rem;
+  color: var(--accent-cyan);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: var(--accent-soft);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(2, 132, 199, 0.18);
+  display: inline-flex;
+  align-items: center;
+}
+
+.teaching-type-badge {
+  font-size: 0.72rem;
   font-weight: 600;
-  margin-bottom: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  letter-spacing: 0.02em;
+}
+
+.teaching-type-badge i {
+  font-size: 0.65rem;
+}
+
+.teaching-type-badge.badge--lab {
+  background: var(--accent-teal-soft);
+  color: var(--accent-teal);
+  border: 1px solid rgba(13, 148, 136, 0.25);
+}
+
+.teaching-type-badge.badge--theory {
+  background: var(--bg-surface-soft);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
 }
 
 .teaching-title {
-  font-size: 1.18rem;
-  margin-bottom: 0.4rem;
+  font-family: var(--font-serif);
+  font-size: 1.08rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
   line-height: 1.35;
   color: var(--text-main);
 }
 
 .teaching-institution {
-  font-size: 0.82rem;
-  color: var(--accent-teal);
-  font-weight: 600;
-  margin-bottom: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: 0.85rem;
   display: flex;
   align-items: center;
   gap: 0.4rem;
 }
 
-.teaching-desc {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  line-height: 1.5;
-  margin-bottom: 0.85rem;
+.teaching-institution i {
+  color: var(--accent-teal);
+  font-size: 0.75rem;
 }
 
-.teaching-topics {
+.teaching-tags {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 0.35rem;
+  margin-top: auto;
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--border-subtle);
 }
 
-.topic-item {
-  font-size: 0.8rem;
+.teaching-tag {
+  font-size: 0.72rem;
   color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  line-height: 1.4;
+  background: var(--bg-surface-soft);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  font-weight: 500;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
 }
 
-.topic-item i {
-  color: var(--accent-cyan);
-  font-size: 0.7rem;
-  flex-shrink: 0;
+.teaching-card:hover .teaching-tag {
+  border-color: var(--border-color);
+  color: var(--text-main);
 }
 
 /* --------------------------------------------------------------------------
@@ -1586,7 +1640,7 @@ textarea.form-control {
    11. FOOTER & MODALS
    -------------------------------------------------------------------------- */
 .footer {
-  padding: 3rem 0;
+  padding: 2.75rem 0 2.25rem;
   border-top: 1px solid var(--border-color);
   background: var(--bg-surface-soft);
   text-align: center;
@@ -1596,12 +1650,34 @@ textarea.form-control {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
+}
+
+.footer-brand {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.footer-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
 }
 
 .footer-socials {
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+}
+
+.footer-copyright {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  margin: 0.5rem 0 0;
 }
 
 /* Modal Styling (BibTeX & Cmd+K) */
@@ -1820,8 +1896,14 @@ textarea.form-control {
     height: 320px;
   }
 
-  .academic-grid {
+  .academic-grid,
+  .achievements-row-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .teaching-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .contact-grid {
@@ -1883,11 +1965,11 @@ textarea.form-control {
   }
 
   .brand-name {
-    font-size: 1.15rem;
+    font-size: 1.12rem;
   }
 
   .nav-actions {
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
 
   .pub-card {
@@ -1948,12 +2030,7 @@ textarea.form-control {
   }
 
   .nav-brand {
-    gap: 0.55rem;
-  }
-
-  .brand-avatar {
-    width: 36px;
-    height: 36px;
+    gap: 0;
   }
 
   .brand-name {
@@ -1964,6 +2041,27 @@ textarea.form-control {
     display: none;
   }
 
+  .nav-actions {
+    gap: 0.35rem;
+  }
+
+  .nav-actions .btn-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 0.88rem;
+  }
+
+  .nav-actions .btn.btn-sm {
+    padding: 0.32rem 0.6rem;
+    font-size: 0.78rem;
+    gap: 0.3rem;
+  }
+
+  .nav-toggle {
+    width: 35px;
+    height: 35px;
+  }
+
   .filter-bar {
     width: 100%;
   }
@@ -1971,6 +2069,43 @@ textarea.form-control {
   .filter-btn {
     flex: 1 1 auto;
     text-align: center;
+  }
+
+  .teaching-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .nav-container {
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
+  }
+
+  .nav-actions {
+    gap: 0.25rem;
+  }
+
+  .nav-actions .btn-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+
+  .nav-actions .btn.btn-sm {
+    padding: 0.28rem 0.45rem;
+    font-size: 0.74rem;
+    gap: 0.25rem;
+  }
+
+  .nav-toggle {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-name {
+    font-size: 0.98rem;
   }
 }
 

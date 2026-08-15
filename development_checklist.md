@@ -41,21 +41,21 @@
 
 ## 📌 Phase 2: Teaching & Courses Section Cleanup
 
-- [ ] **Task 2.1: Remove Dummy Tags & Verbose Descriptions**
-  - **Target File:** `index.html` (প্রায় লাইন ২৯৩–৩৪০: `<section id="teaching">`)
-  - **Context:** বর্তমান কার্ডগুলোতে `CE LAB 300+`, `CE CORE 300+` এর মতো অবাস্তব ট্যাগ রয়েছে এবং লম্বা প্যারাগ্রাফ/টপিক লিস্ট সেকশনটিকে অতিরিক্ত বড় করে ফেলেছে (মিটিংয়ের স্পষ্ট নির্দেশনা: "No description, make it compact")।
-  - **Action:**
-    1. `CE LAB 300+` এবং `CE CORE 300+` ট্যাগ রিমুভ করতে হবে।
-    2. `.teaching-topics` এর ভিতরের বড় বড় ডেসক্রিপশন প্যারাগ্রাফগুলো বাদ দিতে হবে।
-
-- [ ] **Task 2.2: Add All 3 UIU Courses in a Compact Card Grid**
+- [x] **Task 2.1: Remove Dummy Tags & Verbose Descriptions**
   - **Target File:** `index.html` ও `styles.css`
-  - **Exact Courses to Include (UIU):**
-    1. **GIS and Remote Sensing Lab** (Department of Civil Engineering, UIU)
-    2. **Engineering Hydrology** (Department of Civil Engineering, UIU)
-    3. **Engineering Geology and Geomorphology** (Department of Civil Engineering, UIU)
-  - **Design Guideline:** কার্ডগুলোকে মিনিমালিস্টিক ও কমপ্যাক্ট করতে হবে (Course Title, Department/Institution, এবং ছোট ব্যাজ/আইকন)।
-  - **Verification:** টিচিং সেকশনে ৩টি কার্ড সমান গ্রিডে সুন্দরভাবে দেখাচ্ছে কি না এবং অপ্রয়োজনীয় টেক্সট স্ক্রোল তৈরি করছে না কি না তা নিশ্চিত করা।
+  - **Context:** অবাস্তব `CE LAB 300+`, `CE CORE 300+` ট্যাগ এবং বড় বড় ডেসক্রিপশন লিস্ট বাদ দিয়ে সেকশনটি কমপ্যাক্ট করা হয়েছে।
+
+- [x] **Task 2.2: Add All 6 UIU Courses in a Compact 3x2 Card Grid**
+  - **Target File:** `index.html` ও `styles.css`
+  - **Exact Courses Included (UIU):**
+    1. **CE 462** · GIS and Remote Sensing Lab *(Lab / Sessional)*
+    2. **CE 341** · Engineering Hydrology *(Core Theory)*
+    3. **CE 261** · Engineering Geology & Geomorphology *(Core Theory)*
+    4. **CE 351** · Transportation Planning & Traffic Engineering *(Core Theory)*
+    5. **CE 352** · Transportation Engineering Sessional *(Lab / Sessional)*
+    6. **CE 103** · Practical Surveying & Geomatics Lab *(Lab / Sessional)*
+  - **Design Details:** ৩-কলামের (Desktop 3x2, Tablet 2x3, Mobile 1-col) কমপ্যাক্ট গ্রিড, Course Code ব্যাজ, Lab/Theory ক্যাটাগরি পিল, UIU ডিপার্টমেন্ট মেটাডাটা এবং ছোট কি-ট্যাগ চিপস।
+  - **Verification:** টিচিং সেকশনে ৬টি কার্ড সমান গ্রিডে সুন্দরভাবে দেখাচ্ছে এবং কোনো অতিরিক্ত স্ক্রোল তৈরি করছে না।
 
 ---
 
@@ -89,14 +89,14 @@
 
 ---
 
-## 📌 Phase 5: Technical Skills Section Refinement
+## 📌 Phase 5: Skills & Expertise Section Refinement
 
 - [x] **Task 5.1: Rename Skills Section Heading**
-  - **Target File:** `index.html` (লাইন ৫৯৮–৬০৫)
-  - **Action:** `"Software & Engineering Skills"` থেকে পরিবর্তন করে সরাসরি `"Technical Skills"` এবং সেকশন ট্যাগ `"Skills"` করা হয়েছে।
+  - **Target File:** `index.html` (লাইন ৬৭৩–৬৭৭)
+  - **Action:** `"Technical Skills"` থেকে পরিবর্তন করে `"Skills & Expertise"` এবং সেকশন ট্যাগ `"Skills"` করা হয়েছে অন্যান্য সেকশনের প্যাটার্নের সাথে সামঞ্জস্য রেখে।
 
 - [x] **Task 5.2: Align Skill Categories with CV**
-  - **Target File:** `index.html` (লাইন ৬০৬–৬৪৭)
+  - **Target File:** `index.html` (লাইন ৬৭৮–৭১৬)
   - **Categories & Tools:**
     1. **Simulation & CAD Software:** AutoCAD, QGIS, SUMO, VISSIM, CUBE, ETABS, SAP2000, E-Tank, Zotero
     2. **Programming & Analytics:** Python, Matplotlib (with Cert Link), Seaborn (with Cert Link), Data Analytics, MS Excel
@@ -109,7 +109,7 @@
 
 - [x] **Task 6.1: Sync Navigation & Command Palette (Cmd+K Modal)**
   - **Target File:** `index.html` (Navbar ও Command Palette Modal) ও `script.js`
-  - **Action:** হেডিং বা সেকশন নামের পরিবর্তনের সাথে সামঞ্জস্য রেখে Navbar (`#skills -> Skills`) ও Command Palette (`<span>Technical Skills</span>`) সফলভাবে সিঙ্ক করা হয়েছে।
+  - **Action:** হেডিং বা সেকশন নামের পরিবর্তনের সাথে সামঞ্জস্য রেখে Navbar (`#skills -> Skills`) ও Command Palette (`<span>Skills & Expertise</span>`) সফলভাবে সিঙ্ক করা হয়েছে।
 
 - [ ] **Task 6.2: Responsive & Visual Quality Check**
   - **Action:** মোবাইল, ট্যাবলেট এবং ডেস্কটপ ভিউতে সব পরিবর্তিত সেকশন নিখুঁতভাবে রেন্ডার হচ্ছে কি না এবং কনসোল এরর নেই কি না পরীক্ষা করা।

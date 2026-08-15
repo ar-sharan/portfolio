@@ -91,9 +91,12 @@ Google Scholar: [scholar.google.com/citations](https://scholar.google.com/citati
 *United International University (UIU)* · Dhaka, Bangladesh  
 
 Relevant Courses Taught:
-- GIS and Remote Sensing Lab
-- Engineering Hydrology
-- Engineering Geology and Geomorphology
+- CE 462: GIS and Remote Sensing Lab
+- CE 341: Engineering Hydrology
+- CE 261: Engineering Geology and Geomorphology
+- CE 351: Transportation Planning & Traffic Engineering
+- CE 352: Transportation Engineering Sessional
+- CE 103: Practical Surveying & Geomatics Lab
 
 **Industrial Training at SMEC (Bangladesh) Ltd.** — 03/2024 – 03/2024  
 Dhaka, Bangladesh  
