@@ -439,8 +439,8 @@ button {
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 4rem;
+  grid-template-columns: minmax(0, 1.32fr) minmax(0, 0.88fr);
+  gap: 2.75rem;
   align-items: center;
   position: relative;
   z-index: 3;
@@ -493,12 +493,13 @@ button {
 
 .hero-interests {
   margin-bottom: 2rem;
-  max-width: 640px;
+  width: 100%;
+  max-width: 680px;
   background: rgba(241, 245, 249, 0.65);
   border: 1px solid var(--border-subtle);
   border-left: 3.5px solid var(--accent-cyan);
   border-radius: var(--radius-md);
-  padding: 1rem 1.35rem;
+  padding: 1.1rem 1.4rem;
   box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
 }
 
@@ -520,8 +521,8 @@ button {
 
 .hero-interests-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.55rem 1.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem 1.75rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -529,14 +530,15 @@ button {
 
 .interest-item {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.5rem;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   font-weight: 500;
   color: var(--text-main);
-  line-height: 1.4;
+  line-height: 1.35;
   letter-spacing: -0.01em;
-  transition: color var(--transition-fast);
+  white-space: nowrap;
+  transition: color var(--transition-fast), transform var(--transition-fast);
 }
 
 .interest-item .item-marker {
@@ -548,6 +550,7 @@ button {
 
 .interest-item:hover {
   color: var(--accent-cyan);
+  transform: translateX(2px);
 }
 
 .hero-cta {
@@ -1995,6 +1998,15 @@ textarea.form-control {
   .trb-spotlight-card {
     padding: 1.15rem;
   }
+
+  .hero-interests-list {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+
+  .interest-item {
+    white-space: normal;
+  }
 }
 
 @media (max-width: 576px) {
@@ -2008,11 +2020,6 @@ textarea.form-control {
 
   .hero-name {
     font-size: clamp(2.4rem, 9vw, 3.2rem);
-  }
-
-  .hero-interests-list {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
   }
 
   .hero-interests {
