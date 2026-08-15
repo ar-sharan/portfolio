@@ -89,23 +89,32 @@
       <canvas id="its-canvas"></canvas>
       <div class="container hero-grid">
         <div class="hero-content">
-          <div class="hero-badge-group">
-            <span class="hero-badge"><i class="fas fa-university"></i> Lecturer @ UIU</span>
-            <span class="hero-badge"><i class="fas fa-graduation-cap"></i> M.Sc. Student @ IUT</span>
-            <span class="hero-badge"><i class="fas fa-award"></i> Rank 3rd / 96 (B.Sc.)</span>
-          </div>
-
           <h1 class="hero-name">
             Ahnaf Rafi <span class="highlight">Sharan</span>
           </h1>
 
-          <div class="hero-title-role">
-            <i class="fas fa-route"></i> Civil &amp; Environmental Engineer
+          <!-- Academic Affiliation Byline -->
+          <div class="hero-byline">
+            <div class="hero-designation">Lecturer, Department of Civil Engineering</div>
+            <div class="hero-institution">
+              <i class="fas fa-university" aria-hidden="true"></i>
+              <span>United International University (UIU)</span>
+            </div>
           </div>
 
-          <p class="hero-bio">
-            Lecturer and civil engineering researcher working on <strong>intelligent transportation systems</strong>, <strong>spatial crash prediction</strong>, and data-driven applications in road safety and geotechnical engineering.
-          </p>
+          <!-- Academic Statement & Research Focus -->
+          <div class="hero-statement-box">
+            <p class="hero-statement">
+              Researching <strong>Intelligent Transportation Systems (ITS)</strong>, spatial crash prediction, and machine learning to design safer, resilient, and data-driven urban infrastructure.
+            </p>
+            <div class="hero-focus-tags">
+              <span class="focus-tag-label">Key Focus:</span>
+              <span class="academic-tag">Intelligent Transportation Systems (ITS)</span>
+              <span class="academic-tag">Spatial Crash Modeling</span>
+              <span class="academic-tag">AI Traffic Analytics</span>
+              <span class="academic-tag">Transportation Infrastructure</span>
+            </div>
+          </div>
 
           <div class="hero-cta">
             <a href="#research" class="btn btn-primary">
@@ -572,30 +581,19 @@
       </div>
     </section>
 
-    <!-- 5. FEATURED PROJECTS SECTION -->
+    <!-- 5. ACADEMIC PROJECT SECTION -->
     <section id="projects" class="section section--surface-soft">
       <div class="container">
         <div class="section-header">
-          <span class="section-tag"><i class="fas fa-drafting-compass"></i> Engineering Projects</span>
-          <h2 class="section-title">Major Design &amp; Research Projects</h2>
-          <p class="section-subtitle">Integrated structural, geotechnical, and transportation engineering projects.</p>
+          <span class="section-tag"><i class="fas fa-drafting-compass"></i> Academic Project</span>
+          <h2 class="section-title">Academic Project</h2>
         </div>
 
-        <div class="carousel-wrapper" id="projects-carousel-wrapper">
-          <div class="carousel-header-controls right-aligned">
-            <div class="carousel-nav-btns">
-              <button type="button" class="carousel-btn prev-btn" aria-label="Previous Project" data-target="projects-carousel"><i class="fas fa-chevron-left"></i></button>
-              <button type="button" class="carousel-btn next-btn" aria-label="Next Project" data-target="projects-carousel"><i class="fas fa-chevron-right"></i></button>
-            </div>
-          </div>
-
-          <div class="carousel-container" id="projects-carousel">
-            <div class="projects-grid carousel-track">
-
+        <div class="project-single-container">
           <!-- FYDP Project -->
-          <div class="project-card">
+          <div class="project-card project-card--standalone">
             <div>
-              <div class="project-category">Final Year Design Project (FYDP)</div>
+              <div class="project-category"><i class="fas fa-graduation-cap"></i> Final Year Design Project (FYDP)</div>
               <h3 class="project-title">Eight-Story Residential Building Design &amp; Traffic Impact Assessment</h3>
               <p class="project-desc">
                 Integrated structural analysis using ETABS, mat/pile foundation settlement modeling in PLAXIS 3D, rainwater harvesting design via E-Tank, and Traffic Impact Assessment (TIA) with SUMO microsimulation in Kishoreganj.
@@ -603,11 +601,11 @@
             </div>
             <div>
               <div class="project-tools">
-                <span class="tool-tag">PLAXIS 3D</span>
-                <span class="tool-tag">ETABS</span>
-                <span class="tool-tag">SUMO</span>
-                <span class="tool-tag">E-Tank</span>
-                <span class="tool-tag">AutoCAD</span>
+                <span class="tool-tag"><i class="fas fa-layer-group"></i> PLAXIS 3D</span>
+                <span class="tool-tag"><i class="fas fa-building"></i> ETABS</span>
+                <span class="tool-tag"><i class="fas fa-car"></i> SUMO</span>
+                <span class="tool-tag"><i class="fas fa-tint"></i> E-Tank</span>
+                <span class="tool-tag"><i class="fas fa-drafting-compass"></i> AutoCAD</span>
               </div>
               <div class="pub-actions">
                 <a href="https://eclipse.dev/sumo/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
@@ -619,58 +617,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Project 2 -->
-          <div class="project-card">
-            <div>
-              <div class="project-category">Highway Crash Risk Analytics</div>
-              <h3 class="project-title">Dhaka–Sylhet National Highway (N2) Crash Prediction Model</h3>
-              <p class="project-desc">
-                Compiled crash dataset across National Highway N2. Developed a Negative Binomial Regression model combined with QGIS spatial analysis to map land use and roadside encroachment safety risks.
-              </p>
-            </div>
-            <div>
-              <div class="project-tools">
-                <span class="tool-tag">QGIS</span>
-                <span class="tool-tag">Python</span>
-                <span class="tool-tag">Negative Binomial</span>
-                <span class="tool-tag">Spatial Analysis</span>
-              </div>
-              <div class="pub-actions">
-                <a href="https://www.qgis.org" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
-                  <i class="fas fa-globe"></i> QGIS Platform
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Project 3 -->
-          <div class="project-card">
-            <div>
-              <div class="project-category">Geotechnical Modeling</div>
-              <h3 class="project-title">Soft Soil Strength Analytics from 250 Boreholes</h3>
-              <p class="project-desc">
-                Extracted and analyzed soft-soil geotechnical borehole records across Dhaka City. Derived empirical statistical equations connecting index soil properties with unconfined compressive strength.
-              </p>
-            </div>
-            <div>
-              <div class="project-tools">
-                <span class="tool-tag">Data Analytics</span>
-                <span class="tool-tag">Python</span>
-                <span class="tool-tag">Geotechnical</span>
-                <span class="tool-tag">Regression</span>
-              </div>
-              <div class="pub-actions">
-                <a href="https://doi.org/10.4236/ojce.2023.133035" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
-                  <i class="fas fa-external-link-alt"></i> Related Paper
-                </a>
-              </div>
-            </div>
-          </div>
-
-            </div>
-          </div>
-          <div class="carousel-dots" id="projects-carousel-dots"></div>
         </div>
       </div>
     </section>
@@ -867,7 +813,7 @@
           <kbd>Jump</kbd>
         </button></li>
         <li><button type="button" class="cmd-item" data-action="goto" data-target="#projects">
-          <div class="cmd-item-info"><i class="fas fa-drafting-compass"></i> <span>Engineering Projects</span></div>
+          <div class="cmd-item-info"><i class="fas fa-drafting-compass"></i> <span>Academic Project</span></div>
           <kbd>Jump</kbd>
         </button></li>
         <li><button type="button" class="cmd-item" data-action="goto" data-target="#skills">

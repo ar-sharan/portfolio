@@ -1,0 +1,115 @@
+# 🛠️ Portfolio Development & Correction Checklist
+
+এই চেকলিস্টটি মিটিং ট্রান্সক্রিপশন (`Correction/transcript.md`) এবং সিভি (`cv.md`) অনুযায়ী তৈরি করা হয়েছে। প্রতিটি টাস্কে প্রয়োজনীয় কনটেক্সট, টার্গেট ফাইল, পরিবর্তনের সুনির্দিষ্ট নিয়ম এবং যাচাইয়ের উপায় অন্তর্ভুক্ত আছে। যেকোনো নতুন সেশনে এজেন্ট এই ফাইলটি দেখে ধারাবাহিকভাবে কাজ সম্পন্ন করবে এবং টাস্ক শেষ হলে টিক (`- [x]`) মার্ক করবে।
+
+---
+
+## 📌 Phase 0: Hero Section Academic Identity & Badges Refactoring
+
+- [x] **Task 0.1: Add Academic Affiliation Card & Clean up Hero Badges**
+  - **Target Files:** `index.html` (লাইন ৯০–১১৫) ও `styles.css` (লাইন ৪৫০–৫২০)
+  - **Context:** হোয়াটসঅ্যাপ মেসেজ ও মিটিংয়ের নির্দেশনা (00:25–00:31) অনুযায়ী নামের ওপরের ৩টি বিচ্ছিন্ন ব্যাজ বাদ দিয়ে নামের সাথে পূর্ণ একাডেমিক ডেজিগনেশন একটি মার্জিত বক্সে দেখাতে হবে।
+  - **Applied Changes:**
+    - ওপরের `.hero-badge-group` বাদ দিয়ে নামের নিচে `.hero-affiliation-box` যোগ করা হয়েছে।
+    - **Affiliation Data:** `Lecturer`, `Department of Civil Engineering`, `United International University (UIU)`।
+    - ব্লুপ্রিন্ট গ্লাস স্টাইল ও মোবাইল সেন্টারিং রেসপনসিভনেস যুক্ত করা হয়েছে।
+
+---
+
+## 📌 Phase 1: Research Focus & Interests Refactoring
+
+- [ ] **Task 1.1: Remove Research Pipeline Card (3 Boxes)**
+  - **Target File:** `index.html` (প্রায় লাইন ১৯৯–২২১) ও `styles.css`
+  - **Context:** `#about` সেকশনে থাকা `01 Crash & Geospatial Data`, `02 Statistical & Machine Learning Models`, `03 Research & Teaching` কার্ড ৩টি অতিরিক্ত এবং অন্যান্য সেকশনের সাথে ডুপ্লিকেট তথ্য তৈরি করছে।
+  - **Action:**
+    1. `index.html` থেকে `<div class="research-pipeline-card">...</div>` ব্লকটি সম্পূর্ণ মুছে ফেলতে হবে।
+    2. `styles.css` থেকে অব্যবহৃত `.research-pipeline-card`, `.pipeline-grid`, `.pipeline-step`, `.step-number` সম্পর্কিত রুলগুলো ক্লিনআপ করতে হবে।
+
+- [x] **Task 1.2: Add Dedicated "Research Interests" Badges / Chips**
+  - **Target File:** `index.html` (Hero সেকশনের বায়ো বা About সেকশনের শুরুতে) ও `styles.css`
+  - **Context:** পূর্বের ৩টি বক্সের জায়গায় সিভিতে থাকা ৬টি মূল রিসার্চ ক্ষেত্র পরিষ্কার ট্যাগ হিসেবে শো করতে হবে।
+  - **Exact Content to Insert:**
+    - `Multimodal Traffic Data Analytics`
+    - `AI-Based Traffic Flow & Road Safety Analysis`
+    - `Digital Twins for Transportation Infrastructure`
+    - `Intelligent Transportation Systems (ITS)`
+    - `Transportation Policy & Planning`
+    - `Highway & Airport Pavement Engineering`
+  - **Verification:** পেজ লোড করে দেখতে হবে ৬টি ট্যাগ সুন্দর ও আধুনিক ব্যাজ স্টাইলে সঠিকভাবে রেন্ডার হচ্ছে কি না।
+
+---
+
+## 📌 Phase 2: Teaching & Courses Section Cleanup
+
+- [ ] **Task 2.1: Remove Dummy Tags & Verbose Descriptions**
+  - **Target File:** `index.html` (প্রায় লাইন ২৯৩–৩৪০: `<section id="teaching">`)
+  - **Context:** বর্তমান কার্ডগুলোতে `CE LAB 300+`, `CE CORE 300+` এর মতো অবাস্তব ট্যাগ রয়েছে এবং লম্বা প্যারাগ্রাফ/টপিক লিস্ট সেকশনটিকে অতিরিক্ত বড় করে ফেলেছে (মিটিংয়ের স্পষ্ট নির্দেশনা: "No description, make it compact")।
+  - **Action:**
+    1. `CE LAB 300+` এবং `CE CORE 300+` ট্যাগ রিমুভ করতে হবে।
+    2. `.teaching-topics` এর ভিতরের বড় বড় ডেসক্রিপশন প্যারাগ্রাফগুলো বাদ দিতে হবে।
+
+- [ ] **Task 2.2: Add All 3 UIU Courses in a Compact Card Grid**
+  - **Target File:** `index.html` ও `styles.css`
+  - **Exact Courses to Include (UIU):**
+    1. **GIS and Remote Sensing Lab** (Department of Civil Engineering, UIU)
+    2. **Engineering Hydrology** (Department of Civil Engineering, UIU)
+    3. **Engineering Geology and Geomorphology** (Department of Civil Engineering, UIU)
+  - **Design Guideline:** কার্ডগুলোকে মিনিমালিস্টিক ও কমপ্যাক্ট করতে হবে (Course Title, Department/Institution, এবং ছোট ব্যাজ/আইকন)।
+  - **Verification:** টিচিং সেকশনে ৩টি কার্ড সমান গ্রিডে সুন্দরভাবে দেখাচ্ছে কি না এবং অপ্রয়োজনীয় টেক্সট স্ক্রোল তৈরি করছে না কি না তা নিশ্চিত করা।
+
+---
+
+## 📌 Phase 3: Education & Thesis Section Update
+
+- [ ] **Task 3.1: Clean up B.Sc. Timeline Item Chips**
+  - **Target File:** `index.html` (প্রায় লাইন ১৬১–১৭৩)
+  - **Context:** B.Sc. ডিগ্রির নিচে দেওয়া `.courses-list` চিপগুলো রিসার্চ ইন্টারেস্টের সাথে ওভারল্যাপ করছে।
+  - **Action:** B.Sc. টাইমলাইন আইটেম থেকে `.courses-list` ডিভ ও চিপগুলো রিমুভ করা।
+
+- [ ] **Task 3.2: Add B.Sc. Undergraduate Thesis Title & Supervisor**
+  - **Target File:** `index.html` (B.Sc. Timeline Item)
+  - **Context:** মিটিংয়ে শরণ বিশেষভাবে উল্লেখ করেছেন যে B.Sc. ডিগ্রির নিচে থিসিসের নাম অবশ্যই থাকতে হবে।
+  - **Exact Content to Insert:**
+    - **Thesis:** *Developing Crash Prediction Model for Highways Considering Land Use and Encroachment*
+    - **Supervisor:** *Prof. Moinul Hossain, Ph.D., Professor, CEE, IUT*
+  - **Verification:** Education টাইমলাইনে B.Sc.-র নিচে থিসিস টাইটেল ও সুপারভাইজারের নাম পরিচ্ছন্নভাবে ১-২ লাইনে প্রদর্শিত হচ্ছে কি না।
+
+---
+
+## 📌 Phase 4: Academic Project (FYDP) Showcase Refactoring
+
+- [x] **Task 4.1: Retain Only FYDP as Featured Academic Project & Clean up Non-Projects**
+  - **Target Files:** `index.html` (লাইন ৫৭৫–৬৩০), `styles.css`, এবং Command Palette Modal
+  - **Context:** ইউজারের ফ্রেন্ডের সংশোধনী অনুযায়ী সেকশনে শুধুমাত্র Final Year Design Project (FYDP) থাকবে; বাকি ২টি নন-প্রজেক্ট আইটেম (যা অলরেডি পাবলিকেশন ও থিসিসে আছে) বাদ দেওয়া হয়েছে। এছাড়া ক্যারোসেল কন্ট্রোলস (arrows & dots) সরিয়ে একটি পরিচ্ছন্ন স্ট্যান্ডঅ্যালোন শোকেস কার্ড করা হয়েছে।
+  - **Applied Changes:**
+    - `<h2>` টাইটেল পরিবর্তন করে `Academic Project` করা হয়েছে।
+    - সেকশন ট্যাগ `<span class="section-tag"><i class="fas fa-drafting-compass"></i> Academic Project</span>` সেট করা হয়েছে এবং অপ্রয়োজনীয় সাবটাইটেল মুছে ফেলে মার্জিন/স্পেসিং ব্যালেন্সড রাখা হয়েছে।
+    - ক্যারোসেল র‍্যাপার ও বাটন রিমুভ করে `.project-card--standalone` যুক্ত করা হয়েছে।
+    - Command Palette-এ অ্যাকশন টাইটেল `Academic Project` এ সিঙ্ক করা হয়েছে।
+
+---
+
+## 📌 Phase 5: Technical Skills Section Refinement
+
+- [ ] **Task 5.1: Rename Skills Section Heading**
+  - **Target File:** `index.html` (প্রায় লাইন ৬৭৮–৬৮৫)
+  - **Action:** `"Software & Engineering Skills"` থেকে পরিবর্তন করে সরাসরি `"Technical Skills"` বা `"Skills"` করা।
+
+- [ ] **Task 5.2: Align Skill Categories with CV**
+  - **Target File:** `index.html` (লাইন ৬৮৬–৭২৫)
+  - **Categories & Tools:**
+    1. **Analysis, Simulation & CAD Software:** AutoCAD, SUMO, VISSIM, CUBE, QGIS, ETABS, SAP2000, E-Tank, Zotero
+    2. **Programming & Analytics:** Python, Matplotlib (with Cert Link), Seaborn (with Cert Link), MS Excel / Office
+    3. **Language Proficiency:** English (IELTS Band 7.5), Bengali (Native)
+  - **Verification:** সমস্ত টুল ও সফটওয়্যার ব্যাজ সঠিকভাবে দেখাচ্ছে এবং সার্টিফিকেট লিংকগুলো ঠিকমতো কাজ করছে কি না।
+
+---
+
+## 📌 Phase 6: Global Consistency & Command Palette Sync
+
+- [ ] **Task 6.1: Sync Navigation & Command Palette (Cmd+K Modal)**
+  - **Target File:** `index.html` (Navbar ও Command Palette Modal - লাইন ৮৬০–৮৮৫) ও `script.js`
+  - **Action:** হেডিং বা সেকশন নামের পরিবর্তনের কারণে Navbar ও Command Palette-এ কোনো পুরোনো টেক্সট বা ভাঙা লিংক থাকলে তা আপডেট করা (যেমন: "Software & Engineering Skills" -> "Technical Skills", "Major Design Projects" -> "Academic Projects")।
+
+- [ ] **Task 6.2: Responsive & Visual Quality Check**
+  - **Action:** মোবাইল, ট্যাবলেট এবং ডেস্কটপ ভিউতে সব পরিবর্তিত সেকশন নিখুঁতভাবে রেন্ডার হচ্ছে কি না এবং কনসোল এরর নেই কি না পরীক্ষা করা।
