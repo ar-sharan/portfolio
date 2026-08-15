@@ -113,3 +113,15 @@
 
 - [ ] **Task 6.2: Responsive & Visual Quality Check**
   - **Action:** মোবাইল, ট্যাবলেট এবং ডেস্কটপ ভিউতে সব পরিবর্তিত সেকশন নিখুঁতভাবে রেন্ডার হচ্ছে কি না এবং কনসোল এরর নেই কি না পরীক্ষা করা।
+
+---
+
+## 📌 Phase 7: Contact Information & Phone Number Integration
+
+- [x] **Task 7.1: Add Phone Number Card in Contact Section & Footer Link**
+  - **Target Files:** `index.html` (লাইন ৭৩৮–৭৫২ ও ৮১৫–৮২৫) এবং `cv.md` (লাইন ৩)
+  - **Applied Changes:**
+    - কন্টাক্ট সেকশনে সরাসরি কল করার জন্য `tel:+8801796549094` সহ ডেডিকেটেড ফোন কার্ড (`+880 1796-549094`) যোগ করা হয়েছে।
+    - ওয়েবসাইটের ফুটার সোশ্যাল বারে ফোন আইকন বাটন (`<i class="fas fa-phone-alt"></i>`) যোগ করা হয়েছে।
+    - `cv.md`-এর হেডার কন্টাক্ট লাইনে ফোন নম্বরটি সুন্দরভাবে ফরম্যাট করা হয়েছে।
+

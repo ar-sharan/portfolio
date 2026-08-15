@@ -1,6 +1,6 @@
 # Ahnaf Rafi Sharan
 
-**Pabna-6600, Bangladesh** · [ahnaf@ce.uiu.ac.bd](mailto:ahnaf@ce.uiu.ac.bd) · [+8801796549094](tel:+8801796549094)
+**Pabna-6600, Bangladesh** · [ahnaf@ce.uiu.ac.bd](mailto:ahnaf@ce.uiu.ac.bd) · [+880 1796-549094](tel:+8801796549094)
 
 LinkedIn: [linkedin.com/in/ahnaf-rafi-sharan-06a0391b3](https://linkedin.com/in/ahnaf-rafi-sharan-06a0391b3)  
 Google Scholar: [scholar.google.com/citations](https://scholar.google.com/citations?user=i2RG7TsAAAAJ&hl=en)
