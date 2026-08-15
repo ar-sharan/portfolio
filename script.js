@@ -1335,7 +1335,7 @@ function initializeCommandPalette() {
    -------------------------------------------------------------------------- */
 function initializeScrollAnimations() {
   const animatedElements = document.querySelectorAll(
-    '.section-header, .timeline-card, .achievements-card, .teaching-card, .featured-pub-spotlight, .carousel-wrapper, .skill-category, .contact-card, .contact-form-container'
+    '.section-header, .timeline-card, .achievements-card, .teaching-card, .project-card, .featured-pub-spotlight, .carousel-wrapper, .skill-category, .contact-card, .contact-form-container'
   );
 
   if (reducedMotionQuery.matches || !('IntersectionObserver' in window)) {
@@ -1353,13 +1353,18 @@ function initializeScrollAnimations() {
       }
     });
   }, {
-    threshold: 0.08,
-    rootMargin: '0px 0px -40px 0px'
+    threshold: 0.02,
+    rootMargin: '0px 0px 50px 0px'
   });
 
   animatedElements.forEach(el => {
-    el.classList.add('reveal-item');
-    observer.observe(el);
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight + 50 && rect.bottom > 0) {
+      el.classList.add('reveal-item', 'is-revealed');
+    } else {
+      el.classList.add('reveal-item');
+      observer.observe(el);
+    }
   });
 }
 

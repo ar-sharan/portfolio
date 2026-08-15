@@ -30,11 +30,11 @@
   - **Context:** এআই-স্টাইল চিপ বা ট্যাগ ক্লাউড বাদ দিয়ে ৬টি মূল রিসার্চ ক্ষেত্র পরিষ্কার ২-কলামের একাডেমিক লিস্ট হিসেবে লেফট অ্যাকসেন্ট বর্ডার সহ কার্ডে উপস্থাপন।
   - **Exact Content:**
     - `Multimodal Traffic Data Analytics`
-    - `AI-Based Traffic Flow & Road Safety`
-    - `Digital Twins for Infrastructure`
+    - `AI-Based Traffic Flow and Road Safety Analysis`
+    - `Digital Twins for Transportation Infrastructure`
     - `Intelligent Transportation Systems (ITS)`
-    - `Transportation Policy & Planning`
-    - `Highway & Airport Pavement`
+    - `Transportation Policy and Planning`
+    - `Highway & Airport Pavement Engineering`
   - **Verification:** ডেস্কটপে ২-কলাম ও মোবাইলে ১-কলামে মার্জিত ডট মার্কার সহ সোবার একাডেমিক কার্ড হিসেবে রেন্ডার হচ্ছে।
 
 ---
@@ -45,17 +45,18 @@
   - **Target File:** `index.html` ও `styles.css`
   - **Context:** অবাস্তব `CE LAB 300+`, `CE CORE 300+` ট্যাগ এবং বড় বড় ডেসক্রিপশন লিস্ট বাদ দিয়ে সেকশনটি কমপ্যাক্ট করা হয়েছে।
 
-- [x] **Task 2.2: Add All 6 UIU Courses in a Compact 3x2 Card Grid**
+- [x] **Task 2.2: Add All 7 UIU Courses in a Compact Card Grid**
   - **Target File:** `index.html` ও `styles.css`
   - **Exact Courses Included (UIU):**
-    1. **CE 462** · GIS and Remote Sensing Lab *(Lab / Sessional)*
-    2. **CE 341** · Engineering Hydrology *(Core Theory)*
-    3. **CE 261** · Engineering Geology & Geomorphology *(Core Theory)*
-    4. **CE 351** · Transportation Planning & Traffic Engineering *(Core Theory)*
-    5. **CE 352** · Transportation Engineering Sessional *(Lab / Sessional)*
-    6. **CE 103** · Practical Surveying & Geomatics Lab *(Lab / Sessional)*
-  - **Design Details:** ৩-কলামের (Desktop 3x2, Tablet 2x3, Mobile 1-col) কমপ্যাক্ট গ্রিড, Course Code ব্যাজ, Lab/Theory ক্যাটাগরি পিল, UIU ডিপার্টমেন্ট মেটাডাটা এবং ছোট কি-ট্যাগ চিপস।
-  - **Verification:** টিচিং সেকশনে ৬টি কার্ড সমান গ্রিডে সুন্দরভাবে দেখাচ্ছে এবং কোনো অতিরিক্ত স্ক্রোল তৈরি করছে না।
+    1. **CE 2201** · Engineering Geology and Geomorphology *(Core Theory)*
+    2. **CE 4171** · Irrigation and flood control *(Core Theory)*
+    3. **CE 2104** · GIS and Remote Sensing Lab *(Lab / Sessional)*
+    4. **CE 1202** · Practical Surveying *(Lab / Sessional)*
+    5. **CE 2271** · Engineering Hydrology *(Core Theory)*
+    6. **CE 2200** · Details of Construction *(Lab / Sessional)*
+    7. **CE 2171** · Fluid Mechanics Lab *(Lab / Sessional)*
+  - **Design Details:** ৩-কলামের (Desktop 3-col, Tablet 2-col, Mobile 1-col) কমপ্যাক্ট গ্রিড, Course Code ব্যাজ, Lab/Theory ক্যাটাগরি পিল, UIU ডিপার্টমেন্ট মেটাডাটা এবং ছোট কি-ট্যাগ চিপস।
+  - **Verification:** টিচিং সেকশনে ৭টি কার্ড সমান গ্রিডে সুন্দরভাবে দেখাচ্ছে এবং কোনো অতিরিক্ত স্ক্রোল বা লেআউট সমস্যা তৈরি করছে না।
 
 ---
 
