@@ -2,8 +2,10 @@
 
 **Pabna-6600, Bangladesh** · [ahnaf@ce.uiu.ac.bd](mailto:ahnaf@ce.uiu.ac.bd) · [+880 1796-549094](tel:+8801796549094)
 
-LinkedIn: [linkedin.com/in/ahnaf-rafi-sharan-06a0391b3](https://linkedin.com/in/ahnaf-rafi-sharan-06a0391b3)  
-Google Scholar: [scholar.google.com/citations](https://scholar.google.com/citations?user=i2RG7TsAAAAJ&hl=en)
+Portfolio: [ar-sharan.github.io/portfolio](https://ar-sharan.github.io/portfolio/)  
+Google Scholar: [scholar.google.com/citations](https://scholar.google.com/citations?user=i2RG7TsAAAAJ&hl=en)  
+ResearchGate: [researchgate.net/profile/Ahnaf-Rafi-Sharan](https://www.researchgate.net/profile/Ahnaf-Rafi-Sharan?ev=hdr_xprf)  
+LinkedIn: [linkedin.com/in/ahnaf-rafi-sharan-06a0391b3](https://linkedin.com/in/ahnaf-rafi-sharan-06a0391b3)
 
 ---
 
@@ -79,7 +81,7 @@ Google Scholar: [scholar.google.com/citations](https://scholar.google.com/citati
 
 - Uddin, N., Tasnim, A., **Rafi, A.**, Raihan, M. A., Hossain, M., Fletcher, J., & Rahman, A. S. (2026). *Developing spatial crash prediction model for highways considering land use & encroachment*. Paper presented at **the 105th TRB Annual Meeting (TRB 2026)**, Washington, D.C., USA, January 11–15, 2026. [[Event Link]](https://www.nationalacademies.org/events/886)
 
-- Uddin, N., Tasnim, A., **Rafi, A.**, Raihan, M. A., & Hossain, M. (2025). *Understanding Crash Risk on Highways: The Impact of Land Use, Encroachment and Built Environment*. Paper presented at **the 16th International Conference of Eastern Asia Society for Transportation Studies (EASTS 2025)**, Surakarta, Indonesia. [[Paper Link]](https://www.jstage.jst.go.jp/article/easts/16/0/16_PP4087/_article/-char/ja/)
+- Uddin, N., Tasnim, A., **Rafi, A.**, Raihan, M. A., & Hossain, M. (2025). *Understanding Crash Risk on Highways: The Impact of Land Use, Encroachment and Built Environment*. Paper presented at **the 16th International Conference of Eastern Asia Society for Transportation Studies (EASTS 2025)**, Surakarta, Indonesia. [[DOI: 10.11175/easts.16.PP4087]](https://doi.org/10.11175/easts.16.PP4087) · [[Paper Link]](https://www.jstage.jst.go.jp/article/easts/16/0/16_PP4087/_article/-char/ja/)
 
 - Mohammed, T. U., Uddin, N., & **Rafi, A.** (2024). *Utilization of recycled brick aggregate to ensure circular economy*. In Proceedings of the 1st International Conference on Core Engineering & Technology (IUT-ICCET 2024), Gazipur, Bangladesh. **IUT Journal of Engineering and Technology (JET)**, Special Issue, 848–854. [[ResearchGate]](https://www.researchgate.net/publication/397412213_Utilization_of_Recycled_Brick_Aggregate_to_Ensure_Circular_Economy)
 
