@@ -1336,7 +1336,7 @@ function initializeCommandPalette() {
    -------------------------------------------------------------------------- */
 function initializeScrollAnimations() {
   const animatedElements = document.querySelectorAll(
-    '.section-header, .timeline-card, .research-pipeline-card, .achievements-card, .teaching-card, .featured-pub-spotlight, .carousel-wrapper, .skill-category, .contact-card, .contact-form-container'
+    '.section-header, .timeline-card, .achievements-card, .teaching-card, .featured-pub-spotlight, .carousel-wrapper, .skill-category, .contact-card, .contact-form-container'
   );
 
   if (reducedMotionQuery.matches || !('IntersectionObserver' in window)) {

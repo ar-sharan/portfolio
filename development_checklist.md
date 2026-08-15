@@ -18,24 +18,24 @@
 
 ## 📌 Phase 1: Research Focus & Interests Refactoring
 
-- [ ] **Task 1.1: Remove Research Pipeline Card (3 Boxes)**
+- [x] **Task 1.1: Remove Research Pipeline Card (3 Boxes)**
   - **Target File:** `index.html` (প্রায় লাইন ১৯৯–২২১) ও `styles.css`
   - **Context:** `#about` সেকশনে থাকা `01 Crash & Geospatial Data`, `02 Statistical & Machine Learning Models`, `03 Research & Teaching` কার্ড ৩টি অতিরিক্ত এবং অন্যান্য সেকশনের সাথে ডুপ্লিকেট তথ্য তৈরি করছে।
   - **Action:**
     1. `index.html` থেকে `<div class="research-pipeline-card">...</div>` ব্লকটি সম্পূর্ণ মুছে ফেলতে হবে।
     2. `styles.css` থেকে অব্যবহৃত `.research-pipeline-card`, `.pipeline-grid`, `.pipeline-step`, `.step-number` সম্পর্কিত রুলগুলো ক্লিনআপ করতে হবে।
 
-- [x] **Task 1.2: Add Dedicated "Research Interests" Badges / Chips**
-  - **Target File:** `index.html` (Hero সেকশনের বায়ো বা About সেকশনের শুরুতে) ও `styles.css`
-  - **Context:** পূর্বের ৩টি বক্সের জায়গায় সিভিতে থাকা ৬টি মূল রিসার্চ ক্ষেত্র পরিষ্কার ট্যাগ হিসেবে শো করতে হবে।
-  - **Exact Content to Insert:**
+- [x] **Task 1.2: Add Dedicated "Research Focus & Expertise" 2-Column Academic List**
+  - **Target File:** `index.html` (Hero সেকশন) ও `styles.css`
+  - **Context:** এআই-স্টাইল চিপ বা ট্যাগ ক্লাউড বাদ দিয়ে ৬টি মূল রিসার্চ ক্ষেত্র পরিষ্কার ২-কলামের একাডেমিক লিস্ট হিসেবে লেফট অ্যাকসেন্ট বর্ডার সহ কার্ডে উপস্থাপন।
+  - **Exact Content:**
     - `Multimodal Traffic Data Analytics`
-    - `AI-Based Traffic Flow & Road Safety Analysis`
-    - `Digital Twins for Transportation Infrastructure`
+    - `AI-Based Traffic Flow & Road Safety`
+    - `Digital Twins for Infrastructure`
     - `Intelligent Transportation Systems (ITS)`
     - `Transportation Policy & Planning`
-    - `Highway & Airport Pavement Engineering`
-  - **Verification:** পেজ লোড করে দেখতে হবে ৬টি ট্যাগ সুন্দর ও আধুনিক ব্যাজ স্টাইলে সঠিকভাবে রেন্ডার হচ্ছে কি না।
+    - `Highway & Airport Pavement`
+  - **Verification:** ডেস্কটপে ২-কলাম ও মোবাইলে ১-কলামে মার্জিত ডট মার্কার সহ সোবার একাডেমিক কার্ড হিসেবে রেন্ডার হচ্ছে।
 
 ---
 
@@ -91,25 +91,25 @@
 
 ## 📌 Phase 5: Technical Skills Section Refinement
 
-- [ ] **Task 5.1: Rename Skills Section Heading**
-  - **Target File:** `index.html` (প্রায় লাইন ৬৭৮–৬৮৫)
-  - **Action:** `"Software & Engineering Skills"` থেকে পরিবর্তন করে সরাসরি `"Technical Skills"` বা `"Skills"` করা।
+- [x] **Task 5.1: Rename Skills Section Heading**
+  - **Target File:** `index.html` (লাইন ৫৯৮–৬০৫)
+  - **Action:** `"Software & Engineering Skills"` থেকে পরিবর্তন করে সরাসরি `"Technical Skills"` এবং সেকশন ট্যাগ `"Skills"` করা হয়েছে।
 
-- [ ] **Task 5.2: Align Skill Categories with CV**
-  - **Target File:** `index.html` (লাইন ৬৮৬–৭২৫)
+- [x] **Task 5.2: Align Skill Categories with CV**
+  - **Target File:** `index.html` (লাইন ৬০৬–৬৪৭)
   - **Categories & Tools:**
-    1. **Analysis, Simulation & CAD Software:** AutoCAD, SUMO, VISSIM, CUBE, QGIS, ETABS, SAP2000, E-Tank, Zotero
-    2. **Programming & Analytics:** Python, Matplotlib (with Cert Link), Seaborn (with Cert Link), MS Excel / Office
+    1. **Simulation & CAD Software:** AutoCAD, QGIS, SUMO, VISSIM, CUBE, ETABS, SAP2000, E-Tank, Zotero
+    2. **Programming & Analytics:** Python, Matplotlib (with Cert Link), Seaborn (with Cert Link), Data Analytics, MS Excel
     3. **Language Proficiency:** English (IELTS Band 7.5), Bengali (Native)
-  - **Verification:** সমস্ত টুল ও সফটওয়্যার ব্যাজ সঠিকভাবে দেখাচ্ছে এবং সার্টিফিকেট লিংকগুলো ঠিকমতো কাজ করছে কি না।
+  - **Verification:** সমস্ত টুল ও সফটওয়্যার ব্যাজ সঠিকভাবে রেন্ডার হচ্ছে এবং সার্টিফিকেট লিংকগুলো ঠিকমতো কাজ করছে।
 
 ---
 
 ## 📌 Phase 6: Global Consistency & Command Palette Sync
 
-- [ ] **Task 6.1: Sync Navigation & Command Palette (Cmd+K Modal)**
-  - **Target File:** `index.html` (Navbar ও Command Palette Modal - লাইন ৮৬০–৮৮৫) ও `script.js`
-  - **Action:** হেডিং বা সেকশন নামের পরিবর্তনের কারণে Navbar ও Command Palette-এ কোনো পুরোনো টেক্সট বা ভাঙা লিংক থাকলে তা আপডেট করা (যেমন: "Software & Engineering Skills" -> "Technical Skills", "Major Design Projects" -> "Academic Projects")।
+- [x] **Task 6.1: Sync Navigation & Command Palette (Cmd+K Modal)**
+  - **Target File:** `index.html` (Navbar ও Command Palette Modal) ও `script.js`
+  - **Action:** হেডিং বা সেকশন নামের পরিবর্তনের সাথে সামঞ্জস্য রেখে Navbar (`#skills -> Skills`) ও Command Palette (`<span>Technical Skills</span>`) সফলভাবে সিঙ্ক করা হয়েছে।
 
 - [ ] **Task 6.2: Responsive & Visual Quality Check**
   - **Action:** মোবাইল, ট্যাবলেট এবং ডেস্কটপ ভিউতে সব পরিবর্তিত সেকশন নিখুঁতভাবে রেন্ডার হচ্ছে কি না এবং কনসোল এরর নেই কি না পরীক্ষা করা।
