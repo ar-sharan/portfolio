@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice — Ahnaf Rafi Sharan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --surface: #f8fafc;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --accent: #0f766e;
+      --accent-dark: #115e59;
+      --discount-bg: #f0fdf4;
+      --discount-text: #166534;
+      --discount-border: #bbf7d0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f1f5f9;
+      color: var(--text);
+      line-height: 1.5;
+      padding: 40px 20px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .invoice-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--bg);
+      padding: 48px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border);
+    }
+
+    /* Header Bar */
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 28px;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 32px;
+    }
+
+    .brand-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.03em;
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .invoice-meta {
+      text-align: right;
+    }
+
+    .invoice-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .invoice-date {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* Parties Section */
+    .parties-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-bottom: 32px;
+    }
+
+    .party-card {
+      background: var(--surface);
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .party-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .party-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .party-details {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* Table */
+    .table-container {
+      margin-bottom: 28px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      padding: 12px 16px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    th.col-amount {
+      text-align: right;
+    }
+
+    td {
+      padding: 18px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      vertical-align: top;
+    }
+
+    td.col-amount {
+      text-align: right;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .item-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .item-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Summary Calculation Section */
+    .summary-section {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 32px;
+    }
+
+    .summary-box {
+      width: 360px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    .summary-row.discount-row {
+      color: var(--discount-text);
+      background: var(--discount-bg);
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px dashed var(--discount-border);
+      font-weight: 500;
+      margin: 6px 0;
+    }
+
+    .summary-row.total-row {
+      border-top: 2px solid var(--text);
+      padding-top: 14px;
+      margin-top: 6px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .summary-value {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .total-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px;
+      color: var(--accent);
+    }
+
+    /* Payment & Notes Grid */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .info-card {
+      background: var(--surface);
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .info-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .info-list {
+      list-style: none;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .info-list strong {
+      color: var(--text);
+    }
+
+    .note-text {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Actions Bar */
+    .actions-bar {
+      max-width: 800px;
+      margin: 20px auto 0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--text);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: #1e293b;
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: none;
+        padding: 0;
+      }
+
+      .invoice-container {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        max-width: 100%;
+      }
+
+      .actions-bar {
+        display: none;
+      }
+
+      @page {
+        size: A4;
+        margin: 15mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="invoice-container">
+    <!-- Header -->
+    <div class="invoice-header">
+      <div>
+        <h1 class="brand-title">INVOICE</h1>
+        <div class="brand-subtitle">Academic Portfolio Website Development</div>
+      </div>
+      <div class="invoice-meta">
+        <div class="invoice-id">REF # SHARAN-PORTFOLIO-2026</div>
+        <div class="invoice-date">Date: August 16, 2026</div>
+      </div>
+    </div>
+
+    <!-- Parties -->
+    <div class="parties-grid">
+      <div class="party-card">
+        <div class="party-label">Billed By</div>
+        <div class="party-name">Fahmid Hasan Taohid</div>
+        <div class="party-details">
+          AI Automation Specialist and Consultant<br>
+          Email: fahmidhasantaohid@gmail.com<br>
+          Location: Dhaka, Bangladesh
+        </div>
+      </div>
+
+      <div class="party-card">
+        <div class="party-label">Billed To</div>
+        <div class="party-name">Ahnaf Rafi Sharan</div>
+        <div class="party-details">
+          Lecturer, Department of Civil Engineering<br>
+          United International University (UIU)<br>
+          Email: ahnaf@ce.uiu.ac.bd
+        </div>
+      </div>
+    </div>
+
+    <!-- Line Items Table -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 5%;">#</th>
+            <th style="width: 70%;">Description</th>
+            <th class="col-amount" style="width: 25%;">Market Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>
+              <div class="item-title">Academic Portfolio Website Design, Development & Deployment</div>
+              <div class="item-desc">
+                Full bespoke responsive website architecture, custom interactive canvas physics, CV synchronization, and GitHub Pages production deployment.
+              </div>
+            </td>
+            <td class="col-amount">৳30,000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary-section">
+      <div class="summary-box">
+        <div class="summary-row">
+          <span>Standard Commercial Market Value:</span>
+          <span class="summary-value">৳30,000 BDT</span>
+        </div>
+        <div class="summary-row discount-row">
+          <span>Friend Courtesy Discount (60%):</span>
+          <span class="summary-value">- ৳18,000 BDT</span>
+        </div>
+        <div class="summary-row total-row">
+          <span>Net Amount Due:</span>
+          <span class="total-value">৳12,000 BDT</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info & Payment Instructions -->
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-title">
+          <span>Payment Instructions</span>
+        </div>
+        <ul class="info-list">
+          <li><strong>bKash (Personal):</strong> 01732021592 (Send Money)</li>
+          <li><strong>Bank Transfer:</strong> Sonali Bank PLC (সোনালী ব্যাংক)</li>
+          <li><strong>Account Name:</strong> Fahmid Hasan Taohid</li>
+          <li><strong>Account Number:</strong> 4430501001168</li>
+          <li><strong>Transfer Type:</strong> NPSB / BEFTN Supported</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <div class="info-title">
+          <span>Project Notes</span>
+        </div>
+        <div class="note-text">
+          • Project Repository: <code>github.com/ar-sharan/portfolio</code><br>
+          • One-off build and deployment completed.<br>
+          • Thank you, Sharan! Best wishes for your research and teaching at UIU.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Print / Save as PDF Button -->
+  <div class="actions-bar">
+    <button class="btn btn-primary" onclick="window.print()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      Print / Save as PDF
+    </button>
+  </div>
+
+</body>
+</html>

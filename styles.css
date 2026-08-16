@@ -1211,7 +1211,8 @@ button {
 }
 
 .pub-list.carousel-track .pub-card,
-.projects-grid.carousel-track .project-card {
+.projects-grid.carousel-track .project-card,
+.teaching-grid.carousel-track .teaching-card {
   flex: 0 0 calc(34% - 0.85rem);
   min-width: 290px;
   scroll-snap-align: start;
@@ -1277,7 +1278,8 @@ button {
 
 @media (max-width: 992px) {
   .pub-list.carousel-track .pub-card,
-  .projects-grid.carousel-track .project-card {
+  .projects-grid.carousel-track .project-card,
+  .teaching-grid.carousel-track .teaching-card {
     flex: 0 0 calc(52% - 0.75rem);
     min-width: 270px;
   }
@@ -1285,7 +1287,8 @@ button {
 
 @media (max-width: 640px) {
   .pub-list.carousel-track .pub-card,
-  .projects-grid.carousel-track .project-card {
+  .projects-grid.carousel-track .project-card,
+  .teaching-grid.carousel-track .teaching-card {
     flex: 0 0 calc(88% - 0.5rem);
     min-width: 260px;
   }
@@ -1310,7 +1313,9 @@ button {
   gap: 1rem;
 }
 
-.pub-card.is-filtered-out {
+.pub-card.is-filtered-out,
+.teaching-card.is-filtered-out,
+.project-card.is-filtered-out {
   display: none !important;
 }
 

@@ -801,11 +801,12 @@ function initializeCarousels() {
 
     container.setAttribute('role', 'region');
     container.setAttribute('aria-roledescription', 'carousel');
-    container.setAttribute('aria-label', id === 'pub-carousel' ? 'Publications' : 'Projects');
+    const ariaLabel = id === 'pub-carousel' ? 'Publications' : (id === 'teaching-carousel' ? 'Courses Taught' : 'Projects');
+    container.setAttribute('aria-label', ariaLabel);
     container.setAttribute('tabindex', '0');
 
     function getVisibleCards() {
-      return Array.from(container.querySelectorAll('.pub-card, .project-card')).filter(card => {
+      return Array.from(container.querySelectorAll('.pub-card, .project-card, .teaching-card')).filter(card => {
         return !card.classList.contains('is-filtered-out') && window.getComputedStyle(card).display !== 'none';
       });
     }
@@ -1002,33 +1003,42 @@ function initializeCarousels() {
 }
 
 function initializeFilters() {
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const pubCards = document.querySelectorAll('.pub-card');
+  const filterBars = document.querySelectorAll('.filter-bar');
 
-  filterBtns.forEach(button => {
-    button.setAttribute('aria-pressed', String(button.classList.contains('active')));
-  });
+  filterBars.forEach(filterBar => {
+    const wrapper = filterBar.closest('.carousel-wrapper') || filterBar.closest('section');
+    const filterBtns = filterBar.querySelectorAll('.filter-btn');
+    const cards = wrapper ? wrapper.querySelectorAll('.pub-card, .teaching-card, .project-card') : [];
+    const container = wrapper ? wrapper.querySelector('.carousel-container') : null;
+    const carouselId = container ? container.id : null;
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      filterBtns.forEach(b => b.setAttribute('aria-pressed', 'false'));
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed', 'true');
+    filterBtns.forEach(button => {
+      button.setAttribute('aria-pressed', String(button.classList.contains('active')));
+    });
 
-      const filter = btn.getAttribute('data-filter');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
 
-      pubCards.forEach(card => {
-        const category = card.getAttribute('data-category');
-        const isFilteredOut = filter !== 'all' && category !== filter;
-        card.classList.toggle('is-filtered-out', isFilteredOut);
-        card.setAttribute('aria-hidden', String(isFilteredOut));
+        const filter = btn.getAttribute('data-filter');
+
+        cards.forEach(card => {
+          const category = card.getAttribute('data-category');
+          const isFilteredOut = filter !== 'all' && category !== filter;
+          card.classList.toggle('is-filtered-out', isFilteredOut);
+          card.setAttribute('aria-hidden', String(isFilteredOut));
+        });
+
+        // Reset carousel scroll position & update dots
+        if (carouselId && carouselInstances[carouselId]) {
+          carouselInstances[carouselId].update();
+        }
       });
-
-      // Reset publication carousel scroll position & update dots
-      if (carouselInstances['pub-carousel']) {
-        carouselInstances['pub-carousel'].update();
-      }
     });
   });
 }
@@ -1335,7 +1345,7 @@ function initializeCommandPalette() {
    -------------------------------------------------------------------------- */
 function initializeScrollAnimations() {
   const animatedElements = document.querySelectorAll(
-    '.section-header, .timeline-card, .achievements-card, .teaching-card, .project-card, .featured-pub-spotlight, .carousel-wrapper, .skill-category, .contact-card, .contact-form-container'
+    '.section-header, .timeline-card, .achievements-card, .project-card, .featured-pub-spotlight, .carousel-wrapper, .skill-category, .contact-card, .contact-form-container'
   );
 
   if (reducedMotionQuery.matches || !('IntersectionObserver' in window)) {

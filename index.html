@@ -530,9 +530,23 @@
           <h2 class="section-title">Courses Taught at UIU</h2>
         </div>
 
-        <div class="teaching-grid">
+        <div class="carousel-wrapper" id="teaching-carousel-wrapper">
+          <div class="carousel-header-controls">
+            <div class="filter-bar">
+              <button type="button" class="filter-btn active" data-filter="all">All Courses</button>
+              <button type="button" class="filter-btn" data-filter="theory">Core Theory</button>
+              <button type="button" class="filter-btn" data-filter="lab">Lab / Sessional</button>
+            </div>
+            <div class="carousel-nav-btns">
+              <button type="button" class="carousel-btn prev-btn" aria-label="Previous Course" data-target="teaching-carousel"><i class="fas fa-chevron-left"></i></button>
+              <button type="button" class="carousel-btn next-btn" aria-label="Next Course" data-target="teaching-carousel"><i class="fas fa-chevron-right"></i></button>
+            </div>
+          </div>
+
+          <div class="carousel-container" id="teaching-carousel">
+            <div class="teaching-grid carousel-track">
           <!-- Course 1: CE 2201 -->
-          <div class="teaching-card">
+          <div class="teaching-card" data-category="theory">
             <div class="teaching-card-header">
               <span class="teaching-code">CE 2201</span>
               <span class="teaching-type-badge badge--theory"><i class="fas fa-book-open"></i> Core Theory</span>
@@ -549,7 +563,7 @@
           </div>
 
           <!-- Course 2: CE 4171 -->
-          <div class="teaching-card">
+          <div class="teaching-card" data-category="theory">
             <div class="teaching-card-header">
               <span class="teaching-code">CE 4171</span>
               <span class="teaching-type-badge badge--theory"><i class="fas fa-book-open"></i> Core Theory</span>
@@ -566,7 +580,7 @@
           </div>
 
           <!-- Course 3: CE 2104 -->
-          <div class="teaching-card">
+          <div class="teaching-card" data-category="lab">
             <div class="teaching-card-header">
               <span class="teaching-code">CE 2104</span>
               <span class="teaching-type-badge badge--lab"><i class="fas fa-flask"></i> Lab / Sessional</span>
@@ -583,7 +597,7 @@
           </div>
 
           <!-- Course 4: CE 1202 -->
-          <div class="teaching-card">
+          <div class="teaching-card" data-category="lab">
             <div class="teaching-card-header">
               <span class="teaching-code">CE 1202</span>
               <span class="teaching-type-badge badge--lab"><i class="fas fa-flask"></i> Lab / Sessional</span>
@@ -600,7 +614,7 @@
           </div>
 
           <!-- Course 5: CE 2271 -->
-          <div class="teaching-card">
+          <div class="teaching-card" data-category="theory">
             <div class="teaching-card-header">
               <span class="teaching-code">CE 2271</span>
               <span class="teaching-type-badge badge--theory"><i class="fas fa-book-open"></i> Core Theory</span>
@@ -617,7 +631,7 @@
           </div>
 
           <!-- Course 6: CE 2200 -->
-          <div class="teaching-card">
+          <div class="teaching-card" data-category="lab">
             <div class="teaching-card-header">
               <span class="teaching-code">CE 2200</span>
               <span class="teaching-type-badge badge--lab"><i class="fas fa-flask"></i> Lab / Sessional</span>
@@ -634,7 +648,7 @@
           </div>
 
           <!-- Course 7: CE 2171 -->
-          <div class="teaching-card">
+          <div class="teaching-card" data-category="lab">
             <div class="teaching-card-header">
               <span class="teaching-code">CE 2171</span>
               <span class="teaching-type-badge badge--lab"><i class="fas fa-flask"></i> Lab / Sessional</span>
@@ -649,6 +663,9 @@
               <span class="teaching-tag">Hydrodynamics</span>
             </div>
           </div>
+            </div>
+          </div>
+          <div class="carousel-dots" id="teaching-carousel-dots"></div>
         </div>
       </div>
     </section>
